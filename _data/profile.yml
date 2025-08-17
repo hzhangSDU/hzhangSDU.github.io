@@ -4,11 +4,11 @@ navbar_name: "Homepage"
 
 positions:
 - logo: /assets/images/badges/SDU.png  # Logo is optional
-  name: Ph.D. in Geographic Information Systems
+  name: Ph.D. in Artificial Intelligence
 # - name: Position 2 without logo
 
 
-email: "zongrong@tamu.edu"
+email: "202234949@mail.sdu.edu.cn"
 cv_link: /assets/CV/cv.pdf  #IDK
 gscholar: XbCCGC4AAAAJ  # This is an example, replace it with your own Google Scholar ID
 github: Jasper0122
