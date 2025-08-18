@@ -8,7 +8,7 @@ pub_date:       "2024, Published"
 cover:  assets/images/covers/TIA2025.png
 authors:
   - Lizhi Zhang
-  - Hui Zhang
+  - Hui ZHANG
   - Fan Li
   - Bo Sun#
 links:
