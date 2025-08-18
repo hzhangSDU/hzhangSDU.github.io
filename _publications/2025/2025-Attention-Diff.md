@@ -4,7 +4,7 @@ date:           2025-01-03 00:01:00 +0800
 selected:       true
 pub_pre:        "IEEE Transactions on Industry Applications "
 pub_date:       "2025"
-cover:  assets/images/covers/2025-Attention-Diff.png
+cover:  assets/images/covers/TIA2025.png
 authors:
   - Lizhi Zhang
   - Hui Zhang
