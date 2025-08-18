@@ -7,10 +7,10 @@ pub_date:       "2024, Published"
 
 cover:  assets/images/covers/TIA2025.png
 authors:
-  - Lizhi Zhang
+  - Lizhi ZHANG
   - Hui ZHANG
-  - Fan Li
-  - Bo Sun#
+  - Fan LI
+  - Bo SUN#
 links:
   Paper: https://ieeexplore.ieee.org/abstract/document/10820979
 #  Unsplash: https://unsplash.com/photos/sliced-in-half-pineapple--_PLJZmHZzk
