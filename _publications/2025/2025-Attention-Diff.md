@@ -2,10 +2,7 @@
 title:          "Bi-level Optimal Design of Integrated Energy System with Synergy of Renewables, Conversion, Storage, and Demand"
 date:           2025-01-03 00:01:00 +0800
 selected:       true
-#pub:            ""
-#pub_pre:        "IEEE Transactions on Industry Applications"
-pub_post:       ''
-#pub_last:       ' <span class="badge badge-pill badge-publication badge-success">Spotlight</span>'
+pub_pre:        "IEEE Transactions on Industry Applications "
 pub_date:       "2025"
 
 #abstract: >-
