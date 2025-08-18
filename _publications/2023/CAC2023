@@ -1,1 +1,17 @@
+---
+title:          "Interval Type-2 Fuzzy Logic System Based on Batch Normalization and Uniform Regularization with Application to Time Series Forecasting"
+date:           2023-04-16 00:01:00 +0800
+selected:       true
+pub_post:       'China Automation Congress, Chongqing, China'
+pub_date:       "2023, Published"
 
+cover:  assets/images/covers/CAC2023.png
+authors:
+  - Hui ZHANG
+  - Bo SUN
+  - Lizhi ZHANG
+  - Liang ZHANG
+links:
+  Paper: https://ieeexplore.ieee.org/abstract/document/10450808/
+#  Unsplash: https://unsplash.com/photos/sliced-in-half-pineapple--_PLJZmHZzk
+---
