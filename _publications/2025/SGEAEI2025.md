@@ -10,7 +10,7 @@ authors:
   - Xiaopeng WANG
   - Hui ZHANG
   - Xuefang LI
-  - Bo SUN #
+  - Bo SUN#
 links:
   # Paper: https://ieeexplore.ieee.org/abstract/document/10820979
 #  Unsplash: https://unsplash.com/photos/sliced-in-half-pineapple--_PLJZmHZzk
