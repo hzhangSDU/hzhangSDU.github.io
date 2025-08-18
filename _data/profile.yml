@@ -71,112 +71,97 @@ portrait_caption: >-
   Born passionate, yet hidden in the mundane.
 
 education:
-- name: Shandong University
-  logo: /assets/images/badges/SDU.png
-  position: Ph.D. in Control Engineering
-  date: Aug. 2022 - Present
-- name: Shandong Jianzhu University
-  logo: /assets/images/badges/SDJU.png
-  position: B.S. in Internet of Things Engineering
-  date: Aug. 2018 - May. 2022
+  - name: Shandong University
+    logo: /assets/images/badges/SDU.png
+    position: Ph.D. in Control Engineering
+    date: Aug. 2022 - Present
+  - name: Shandong Jianzhu University
+    logo: /assets/images/badges/SDJU.png
+    position: B.S. in Internet of Things Engineering
+    date: Aug. 2018 - May. 2022
 
 honors:
-- name: First-class Scholarship for Doctoral Students
-  logo: /assets/images/badges/SDU.png
-  position: Shandong University
-  date: Aug. 2024
-
-- name: National Scholarship
-  logo: /assets/images/badges/GH.jpg
-  position: Ministry of Education of the People's Republic of China
-  date: Aug. 2021
-  
-- name: National Encouragement Scholarship
-  logo: /assets/images/badges/GH.jpg
-  position: Ministry of Education of the People's Republic of China
-  date: Aug. 2020
-  
-- name: Quancheng Scholarship
-  logo: /assets/images/badges/GH.jpg
-  position: Jinan Municipal Education Bureau
-  date: Nov. 2021
-
-- name: Top ten Self-motivated and outstanding students
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Aug. 2020
-
-- name: Nomination for the President's Scholarship
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Aug. 2021
-
-- name: Outstanding Graduate
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Jun. 2022
-
-- name: "Shanfa" Group Innovation and Entrepreneurship Scholarship (*2)
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Jun. 2021
-
-- name: Outstanding Individual in the 2019 Winter Vacation Social Practice Activity
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Jun. 2021
-  
-- name: First-class Scholarship for Outstanding Students (*3)
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Jun. 2019 - Jun. 2021
-
-- name: Outstanding Student (*3)
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Jun. 2019 - Jun. 2021
-
-- name: Outstanding Student Leader (*2)
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Jun. 2020 - Jun. 2021
-
-- name: Outstanding Student Leader Model (*2)
-  logo: /assets/images/badges/SDJU.png
-  position: Shandong Jianzhu University
-  date: Jun. 2020 - Jun. 2021
-
+  - name: First-class Scholarship for Doctoral Students
+    logo: /assets/images/badges/SDU.png
+    position: Shandong University
+    date: Aug. 2024
+  - name: National Scholarship
+    logo: /assets/images/badges/GH.jpg
+    position: Ministry of Education of the People's Republic of China
+    date: Aug. 2021
+  - name: National Encouragement Scholarship
+    logo: /assets/images/badges/GH.jpg
+    position: Ministry of Education of the People's Republic of China
+    date: Aug. 2020
+  - name: Quancheng Scholarship
+    logo: /assets/images/badges/GH.jpg
+    position: Jinan Municipal Education Bureau
+    date: Nov. 2021
+  - name: Top ten Self-motivated and outstanding students
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Aug. 2020
+  - name: Nomination for the President's Scholarship
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Aug. 2021
+  - name: Outstanding Graduate
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Jun. 2022
+  - name: "Shanfa" Group Innovation and Entrepreneurship Scholarship (*2)
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Jun. 2021
+  - name: Outstanding Individual in the 2019 Winter Vacation Social Practice Activity
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Jun. 2021
+  - name: First-class Scholarship for Outstanding Students (*3)
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Jun. 2019 - Jun. 2021
+  - name: Outstanding Student (*3)
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Jun. 2019 - Jun. 2021
+  - name: Outstanding Student Leader (*2)
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Jun. 2020 - Jun. 2021
+  - name: Outstanding Student Leader Model (*2)
+    logo: /assets/images/badges/SDJU.png
+    position: Shandong Jianzhu University
+    date: Jun. 2020 - Jun. 2021
 
 awards:
-- name: 2025 MRAI Best Paper Award
-  date: Jun. 2025
-- name: 14th Edition of International Research Award
-  date: Jun. 2024
-- name: Third Prize of the Third China Postgraduate Dual Carbon Innovation and Creativity Competition
-  date: Nov. 2024
-- name: Provincial College Students Innovation and Entrepreneurship Training Project - Outstanding Award for Project Completion
-  date: Sep. 2022
-- name: Outstanding B.S. Degree Thesis Award
-  date: Jun. 2022
-- name: Third Prize at the National Level of the 14th iCAN International Innovation and Entrepreneurship Competition
-  date: Aug. 2020
-- name: First Prize in the Shandong Region of the National Undergraduate Electronic Design Contest
-  date: Jun. 2020
-- name: Spring Seedling Award for Outstanding Digital Economy Projects in Shandong, China
-  date: Jun. 2020
-- name: The Third Prize of the Provincial Digital Economy Excellent Project in Shandong, China
-  date: Jun. 2020
-- name: First Prize at the provincial level in the College Students Science and Technology Creativity and Design Competition (*2)
-  date: Sep. 2020
-- name: First Prize at the provincial level in the science popularization Exhibit collection activity
-  date: Sep. 2020
-- name: Second prize at the provincial level in the science popularization Exhibit collection activity
-  date: Sep. 2020
-- name: The second prize at the provincial level of the iCAN International Innovation and Entrepreneurship Competition in Shandong Province
-  date: Sep. 2020
-- name: The second Prize at the provincial level in the Shandong Province Internet of Things Creativity Competition
-  date: Sep. 2020
-- name: The second Prize at the provincial level in the Shandong Province Internet of Things Creativity Competition
-  date: Sep. 2020
-- name: The third Prize at the provincial level in the College Students Science and Technology Creativity and Design Competition
-  date: Sep. 2019
+  - name: 2025 MRAI Best Paper Award
+    date: Jun. 2025
+  - name: 14th Edition of International Research Award
+    date: Jun. 2024
+  - name: Third Prize of the Third China Postgraduate Dual Carbon Innovation and Creativity Competition
+    date: Nov. 2024
+  - name: Provincial College Students Innovation and Entrepreneurship Training Project - Outstanding Award for Project Completion
+    date: Sep. 2022
+  - name: Outstanding B.S. Degree Thesis Award
+    date: Jun. 2022
+  - name: Third Prize at the National Level of the 14th iCAN International Innovation and Entrepreneurship Competition
+    date: Aug. 2020
+  - name: First Prize in the Shandong Region of the National Undergraduate Electronic Design Contest
+    date: Jun. 2020
+  - name: Spring Seedling Award for Outstanding Digital Economy Projects in Shandong, China
+    date: Jun. 2020
+  - name: The Third Prize of the Provincial Digital Economy Excellent Project in Shandong, China
+    date: Jun. 2020
+  - name: First Prize at the provincial level in the College Students Science and Technology Creativity and Design Competition (*2)
+    date: Sep. 2020
+  - name: First Prize at the provincial level in the science popularization Exhibit collection activity
+    date: Sep. 2020
+  - name: Second prize at the provincial level in the science popularization Exhibit collection activity
+    date: Sep. 2020
+  - name: The second prize at the provincial level of the iCAN International Innovation and Entrepreneurship Competition in Shandong Province
+    date: Sep. 2020
+  - name: The second Prize at the provincial level in the Shandong Province Internet of Things Creativity Competition
+    date: Sep. 2020
+  - name: The third Prize at the provincial level in the College Students Science and Technology Creativity and Design Competition
+    date: Sep. 2019
