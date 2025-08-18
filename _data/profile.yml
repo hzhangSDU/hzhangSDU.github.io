@@ -68,21 +68,17 @@ short_bio: >-
 
 portrait_url: /assets/images/photos/Author_Hui_Zhang.jpeg
 portrait_caption: >-
-  Serve the cat, rule the world.
+  Born passionate, yet hidden in the mundane.
 
 education:
-- name: Texas A&M University
-  logo: /assets/images/badges/Texas_A&M_University_seal.svg
-  position: Ph.D. in Geographic Information Systems
-  date: Aug. 2025 - Present
-- name: University of Southern California
-  logo: /assets/images/badges/usc.png
-  position: M.S. in Spatial Data Science
-  date: Aug. 2023 - May. 2025
-- name: Nanjing Audit University
-  logo: /assets/images/badges/NAU.png
-  position: B.A. in Economics, Finance
-  date: Sep. 2018 - Jul. 2022
+- name: Shandong University
+  logo: /assets/images/badges/SDU.png
+  position: Ph.D. in Control Engineering
+  date: Aug. 2022 - Present
+- name: Shandong Jianzhu University
+  logo: /assets/images/badges/SDJU.png
+  position: B.S. in Internet of Things Engineering
+  date: Aug. 2018 - May. 2022
 
 experience:
 - name: The Hong Kong University of Science and Technology (Guangzhou)
