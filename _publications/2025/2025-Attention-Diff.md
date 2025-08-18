@@ -2,8 +2,9 @@
 title:          "Bi-level Optimal Design of Integrated Energy System with Synergy of Renewables, Conversion, Storage, and Demand"
 date:           2025-01-03 00:01:00 +0800
 selected:       true
-pub_pre:        "IEEE Transactions on Industry Applications "
-pub_date:       "2025"
+pub_post:       'IEEE Transactions on Industry Applications [JCR-Q1, IF=4.5]'
+pub_date:       "2024, Published"
+
 cover:  assets/images/covers/TIA2025.png
 authors:
   - Lizhi Zhang
