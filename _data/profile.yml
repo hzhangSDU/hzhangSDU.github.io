@@ -81,42 +81,28 @@ education:
   date: Aug. 2018 - May. 2022
 
 honors:
-- name: The Hong Kong University of Science and Technology (Guangzhou)
-  logo: /assets/images/badges/UST.svg.png
-  position: Research Assistant - AI4City Lab
-  date: Aug. 2024 - Present
+- name: First-class Scholarship for Doctoral Students
+  logo: /assets/images/badges/SDU.png
+  position: Shandong University
+  date: Aug. 2024
 
-- name: Harvard University
-  logo: /assets/images/badges/Harvard.png
-  position: Research Assistant - Spatial Data Lab
-  date: May. 2024 - Sep. 2024
+- name: National Scholarship
+  logo: /assets/images/badges/GH.jpg
+  position: Ministry of Education of the People's Republic of China
+  date: Aug. 2021
 
-- name: City of Hope
-  logo: /assets/images/badges/COH.png
-  position: Data Science Intern
-  date: Feb. 2024 - May. 2024
+- name: Top ten Self-motivated and outstanding students
+  logo: /assets/images/badges/SDJU.png
+  position: Shandong Jianzhu University
+  date: Aug. 2020
 
-- name: The Hong Kong Polytechnic University
-  logo: /assets/images/badges/PolyU.svg_.png
-  position: Research Assistant
-  date: Sep. 2023 - May. 2024
-
-- name: NetEase Youdao
-  logo: /assets/images/badges/youdaojfif.jfif
-  position: Data Analyst Intern
-  date: Jan. 2023 - Apr. 2023
 
 
 awards:
-- name: 2025 AAG GISS Student Paper Competition Honorable Mention
-  date: Mar. 2025
-- name: 2025 EIP Student of the Year Award
-  date: Mar. 2025
-- name: Most Suitably Applied Analysis Methodology Award
-  date: Feb. 2025
-- name: Bronze medal in Kaggle's Child Mind Institute - Detect Sleep States
-  date: Jan. 2024
-- name: Outstanding Graduate Award
-  date: Jun. 2022
-- name: Provincial Champion of The World Mandarin Debating Championship
-  date: Sep. 2020
+- name: 14th Edition of International Research Award
+  date: Jun. 2024
+- name: 2025 MRAI Best Paper Award
+  date: Jun. 2025
+- name: Third Prize of the Third China Postgraduate "Dual Carbon" Innovation and Creativity Competition
+  date: Nov. 2024
+
