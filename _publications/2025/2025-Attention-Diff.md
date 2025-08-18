@@ -1,6 +1,6 @@
 ---
-title:          "ViT-Based Attention Mechanism Uncovers Disparities in Urban Economic Landscapes Across Cities"
-date:           2025-02-23 00:01:00 +0800
+title:          "Bi-level Optimal Design of Integrated Energy System with Synergy of Renewables, Conversion, Storage, and Demand"
+date:           2025-01-03 00:01:00 +0800
 selected:       true
 #pub:            ""
 #pub_pre:        ""
