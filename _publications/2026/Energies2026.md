@@ -14,7 +14,7 @@ authors:
   - Bing ZHOU
   - Haoyu MING
   - Wei ZHANG#
-  - Hui ZAHNG
+  - Hui ZHANG
 links:
   # Paper: https://ieeexplore.ieee.org/abstract/document/9727414/
 #  Unsplash: https://unsplash.com/photos/sliced-in-half-pineapple--_PLJZmHZzk
