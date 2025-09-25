@@ -3,7 +3,7 @@ title:          "Hydrogen Perception System Design: Optimize the Deployment Sche
 date:           2026-11-16 00:01:00 +0800
 selected:       true
 pub_post:       'IEEE Transactions on Neural Networks and Learning Systems [JCR-Q1, TOP, IF=8.9]'
-pub_date:       "2026, Waiting for Submission"
+pub_date:       "2026, Under Review"
 
 cover:  assets/images/covers/TNNLS2025.png
 authors:
@@ -11,8 +11,9 @@ authors:
   - Jiaxin ZHANG
   - Haoyu MING
   - Bing ZHOU
-  - Wei PENG
   - Guangyao FAN
+  - Lizhi ZHANG
+  - Wei PENG
   - Xuefang LI#
   - Bo SUN#
 links:
