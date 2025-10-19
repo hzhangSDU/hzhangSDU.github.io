@@ -82,6 +82,10 @@ education:
     date: Aug. 2018 - May. 2022
 
 honors:
+  - name: National Scholarship
+    logo: /assets/images/badges/GH.jpg
+    position: Ministry of Education of the People's Republic of China
+    date: Oct. 2025
   - name: First-class Scholarship for Doctoral Students
     logo: /assets/images/badges/SDU.png
     position: Shandong University
