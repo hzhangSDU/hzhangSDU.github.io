@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度解析：IIDF 综合能源系统设计框架</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Serif SC', sans-serif; background-color: #f1f5f9; color: #334155; }
+        h1, h2, h3 { font-family: 'Noto Serif SC', serif; }
+        
+        /* Glass Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Highlight Ribbon */
+        .ribbon {
+            border-left: 4px solid #0d9488; /* Teal-600 */
+        }
+
+        /* Animations */
+        @keyframes pulse-border {
+            0% { border-color: #e2e8f0; }
+            50% { border-color: #0d9488; }
+            100% { border-color: #e2e8f0; }
+        }
+        .anim-active {
+            animation: pulse-border 2s infinite;
+            background-color: #f0fdfa; /* Teal-50 */
+        }
+        
+        /* Math Formatting */
+        .math { font-family: 'Times New Roman', serif; font-style: italic; }
+    </style>
+</head>
+<body class="antialiased pb-20">
+
+    <!-- 1. Metadata Header -->
+    <header class="bg-slate-900 text-white pt-16 pb-24 relative overflow-hidden shadow-2xl">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                <div class="md:w-3/4">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-teal-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">IEEE Trans. Ind. Informat.</span>
+                        <span class="text-slate-400 font-mono text-sm">Vol. 21, No. 8, August 2025</span>
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-bold leading-tight mb-6">
+                        基于强化学习的综合能源系统<br>
+                        <span class="text-teal-400">结构、容量与运行</span>交互式集成设计框架
+                    </h1>
+                    
+                    <!-- Authors -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-lg p-4 border border-white/10 inline-block">
+                        <div class="text-sm font-semibold text-slate-200 mb-1">
+                            Hui Zhang, Lizhi Zhang, Haozeng Bie, Zhiwei Xu, Guangyao Fan, Bin Jia, <span class="text-teal-300">Bo Sun*</span>
+                        </div>
+                        <div class="text-xs text-slate-400">
+                            山东大学 控制科学与工程学院 | 山东警察学院
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="md:w-1/4 flex flex-col gap-3">
+                    <div class="glass-card bg-slate-800/50 border-slate-700 p-4 text-center">
+                        <div class="text-2xl font-bold text-teal-400">IIDF</div>
+                        <div class="text-xs text-slate-400 uppercase">Interactive Integrated Design Framework</div>
+                    </div>
+                    <div class="text-right text-xs text-slate-500">DOI: 10.1109/TII.2025.3556037</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 -mt-12 relative z-20 space-y-16">
+
+        <!-- 2. Problem & Core Idea -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="glass-card p-8 lg:col-span-2 ribbon">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">核心痛点：为什么 MES 设计这么难？</h2>
+                <p class="text-slate-600 leading-relaxed mb-4">
+                    综合能源系统 (MES) 的设计不仅仅是决定“买多大的设备”（容量），更难的是决定<strong>“买什么设备”</strong>以及<strong>“设备间如何连接”</strong>（结构）。
+                </p>
+                <ul class="space-y-3 text-slate-600 text-sm">
+                    <li class="flex items-start">
+                        <span class="text-red-500 mr-2">❌</span>
+                        <span><strong>传统方法缺陷：</strong> 往往预先固定好层级结构（例如：燃气轮机必须连锅炉），导致错失了更灵活、更节能的非典型连接方案。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-red-500 mr-2">❌</span>
+                        <span><strong>组合爆炸：</strong> 如果让计算机自由组合设备，搜索空间是 $2^n \times n!$，计算量也是天文数字。</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="glass-card p-8 bg-teal-50 border-teal-200">
+                <h3 class="text-lg font-bold text-teal-900 mb-3">IIDF 的解决方案</h3>
+                <p class="text-teal-800 text-sm mb-4">
+                    将物理问题转化为“AI 画图”问题。
+                </p>
+                <div class="space-y-2">
+                    <div class="bg-white p-3 rounded shadow-sm text-sm">
+                        <strong class="text-slate-800">1. 上层 (RL):</strong> <br>AI 智能体负责“搭积木”，生成系统拓扑。
+                    </div>
+                    <div class="bg-white p-3 rounded shadow-sm text-sm">
+                        <strong class="text-slate-800">2. 下层 (Opt):</strong> <br>数学求解器负责“算账”，评估这个拓扑能不能省钱。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. The Framework Visualization -->
+        <section>
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">双层交互设计框架</h2>
+                    <p class="text-slate-500 mt-2">RL Agent 与 数学规划求解器的闭环博弈</p>
+                </div>
+                <button onclick="runSimulation()" id="run-btn" class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg shadow-lg font-bold transition-all flex items-center gap-2">
+                    <span>▶ 启动模拟迭代</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Level 1 -->
+                <div class="lg:col-span-5 glass-card p-8" id="card-l1">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-xs font-bold bg-slate-100 text-slate-500 px-2 py-1 rounded">Level 1</span>
+                        <h3 class="text-xl font-bold text-teal-700">结构搜索层</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="text-sm text-slate-600">
+                            <strong>智能体 (Agent):</strong> 基于 RNN 的策略网络 $\pi_\theta(A|S)$。
+                        </div>
+                        <div class="text-sm text-slate-600">
+                            <strong>动作 (Action):</strong> 生成一个结构序列 $\alpha$。
+                            <div class="mt-2 font-mono text-xs bg-slate-50 p-2 rounded border border-slate-200">
+                                $\alpha = [PGU, HP, \text{Link}_{AB}, ...]$
+                            </div>
+                        </div>
+                        <div class="text-sm text-slate-600">
+                            <strong>策略更新:</strong> 使用带基线的策略梯度算法 (Policy Gradient with Baseline) 来减少方差。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interaction -->
+                <div class="lg:col-span-2 flex flex-col justify-center items-center gap-4">
+                    <div class="w-full text-center transition-all duration-300 opacity-30" id="flow-down">
+                        <div class="text-xs text-slate-400 mb-1">结构 $\alpha$</div>
+                        <svg class="w-8 h-8 mx-auto text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </div>
+                    <div class="w-px h-16 bg-slate-200"></div>
+                    <div class="w-full text-center transition-all duration-300 opacity-30" id="flow-up">
+                        <svg class="w-8 h-8 mx-auto text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                        <div class="text-xs text-slate-400 mt-1">奖励 $R$</div>
+                    </div>
+                </div>
+
+                <!-- Level 2 -->
+                <div class="lg:col-span-5 glass-card p-8" id="card-l2">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-xs font-bold bg-slate-100 text-slate-500 px-2 py-1 rounded">Level 2</span>
+                        <h3 class="text-xl font-bold text-indigo-700">容量-运行协同优化层</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="text-sm text-slate-600">
+                            <strong>任务:</strong> 给定结构 $\alpha$，求解最优容量 $\beta^*$ 和运行策略 $\gamma^*$。
+                        </div>
+                        <div class="text-sm text-slate-600">
+                            <strong>技术难点:</strong> 储能约束是非线性的。
+                            <div class="mt-2 p-2 bg-indigo-50 rounded border border-indigo-100 text-xs text-indigo-800">
+                                <strong>Big-M 法:</strong> 引入大数 M，将非线性约束转化为混合整数线性规划 (MILP)，从而可以用 CPLEX 快速求解。
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-bold text-slate-500">当前成本:</span>
+                                <span class="text-2xl font-bold text-slate-800" id="cost-val">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Deep Dive: Search Space & Domain Knowledge -->
+        <section class="glass-card p-10 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full blur-3xl opacity-10 -mr-20 -mt-20"></div>
+            
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 relative z-10">核心创新：领域知识如何“裁剪”搜索空间？</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                <div>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        如果不加限制，AI 会尝试很多无效组合（比如把光伏板装在地下室，或者让冷水机给锅炉供热）。
+                        论文引入了<strong>两类领域知识</strong>来约束搜索空间 $\mathbb{N}$：
+                    </p>
+                    <ul class="space-y-6">
+                        <li class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">多能供需平衡法则</h4>
+                                <p class="text-sm text-slate-600 mt-1">
+                                    将设备划分为“供电”、“供热”、“供冷”等子空间。强制要求每个能量流层级至少选一个设备，避免系统瘫痪。
+                                </p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">热力学第二定律（能质匹配）</h4>
+                                <p class="text-sm text-slate-600 mt-1">
+                                    规定了连接的物理优先级。例如，高品位能源（电）可以梯级转化为低品位（热），但反之受限。这在搜索空间中表现为设备连接顺序的约束。
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Visualization Chart -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-inner">
+                    <h4 class="text-sm font-bold text-center text-slate-500 mb-4">消融实验：有无领域知识的收敛速度对比</h4>
+                    <div class="h-64">
+                        <canvas id="ablationChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-slate-400 mt-4">
+                        数据来源：论文 Fig. 8 (Case 2)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Results Table -->
+        <section class="mb-20">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">实验结果：全方位碾压</h2>
+            <div class="overflow-x-auto rounded-xl shadow-lg border border-slate-200 bg-white">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                        <tr>
+                            <th class="px-6 py-4">场景 (Scenario)</th>
+                            <th class="px-6 py-4">对比方法</th>
+                            <th class="px-6 py-4 text-right">年化总成本 (CNY)</th>
+                            <th class="px-6 py-4 text-right">计算耗时 (s)</th>
+                            <th class="px-6 py-4">核心优势</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Case 2 -->
+                        <tr class="bg-teal-50/50 border-b border-slate-100">
+                            <td class="px-6 py-4 font-bold text-slate-900 border-r border-slate-100" rowspan="3">Case 2: 居民区<br><span class="text-xs font-normal text-slate-400">复杂负荷, 含光伏</span></td>
+                            <td class="px-6 py-4 font-bold text-teal-700 flex items-center gap-2">
+                                IIDF (Ours) 
+                                <span class="bg-teal-100 text-teal-800 text-[10px] px-1.5 py-0.5 rounded">WINNER</span>
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-900">4,787,500</td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-900">324.07</td>
+                            <td class="px-6 py-4 text-xs">
+                                成本最低，速度比 GA 快 3 倍
+                            </td>
+                        </tr>
+                        <tr class="border-b border-slate-100">
+                            <td class="px-6 py-4">TID (传统遗传算法)</td>
+                            <td class="px-6 py-4 text-right">4,814,300</td>
+                            <td class="px-6 py-4 text-right">1,041.74</td>
+                            <td class="px-6 py-4 text-xs text-slate-400">结构搜索受限</td>
+                        </tr>
+                        <tr class="border-b border-slate-200">
+                            <td class="px-6 py-4">TID-S (固定结构)</td>
+                            <td class="px-6 py-4 text-right text-red-500">5,515,800</td>
+                            <td class="px-6 py-4 text-right">-</td>
+                            <td class="px-6 py-4 text-xs text-red-400">成本高出 ~15%</td>
+                        </tr>
+
+                        <!-- Case 3 -->
+                        <tr class="bg-teal-50/50">
+                            <td class="px-6 py-4 font-bold text-slate-900 border-r border-slate-100" rowspan="1">Case 3: 工业园</td>
+                            <td class="px-6 py-4 font-bold text-teal-700">IIDF (Ours)</td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-900">5,276,200</td>
+                            <td class="px-6 py-4 text-right font-bold text-slate-900">329.50</td>
+                            <td class="px-6 py-4 text-xs">
+                                相比 TID 减少 76% 计算时间
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center text-sm">
+        <div class="max-w-4xl mx-auto">
+            <p class="mb-2">基于论文: Zhang et al., "Interactive Integrated Design Framework..." (2025)</p>
+            <p>IEEE Transactions on Industrial Informatics</p>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // 1. Chart.js: Ablation Study
+        const ctx = document.getElementById('ablationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 25}, (_, i) => i * 12),
+                datasets: [{
+                    label: 'IIDF (含领域知识)',
+                    data: [0.1, 0.3, 0.6, 0.8, 0.88, 0.92, 0.94, 0.96, 0.97, 0.98, 0.98, 0.99, 0.99, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                    borderColor: '#0d9488', // Teal
+                    backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: '无领域知识 (纯RL)',
+                    data: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.32, 0.38, 0.4, 0.42, 0.45, 0.43, 0.48, 0.5, 0.49, 0.52, 0.51, 0.53, 0.55, 0.54, 0.56, 0.58, 0.6, 0.61, 0.62],
+                    borderColor: '#94a3b8', // Slate
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    y: { 
+                        title: { display: true, text: '归一化奖励 (Reward)' }, 
+                        min: 0, 
+                        max: 1.1,
+                        grid: { color: '#f1f5f9' }
+                    },
+                    x: { 
+                        title: { display: true, text: '迭代次数 (Epochs)' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 2. Simulation Animation Logic
+        let isSimulating = false;
+        const cardL1 = document.getElementById('card-l1');
+        const cardL2 = document.getElementById('card-l2');
+        const flowDown = document.getElementById('flow-down');
+        const flowUp = document.getElementById('flow-up');
+        const costVal = document.getElementById('cost-val');
+        const runBtn = document.getElementById('run-btn');
+
+        async function runSimulation() {
+            if (isSimulating) return;
+            isSimulating = true;
+            runBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            runBtn.innerHTML = '<span>⏳ 正在迭代...</span>';
+            costVal.innerText = "--";
+
+            // Simulate 3 loops
+            for (let i = 1; i <= 3; i++) {
+                // Step 1: L1 Active
+                cardL1.classList.add('anim-active');
+                await new Promise(r => setTimeout(r, 800));
+                
+                // Flow Down
+                cardL1.classList.remove('anim-active');
+                flowDown.classList.remove('opacity-30');
+                flowDown.classList.add('opacity-100', 'translate-y-2');
+                await new Promise(r => setTimeout(r, 600));
+                flowDown.classList.add('opacity-30');
+                flowDown.classList.remove('opacity-100', 'translate-y-2');
+
+                // Step 2: L2 Active
+                cardL2.classList.add('anim-active');
+                await new Promise(r => setTimeout(r, 1000));
+                
+                // Update Cost
+                let currentCost = (5000000 - i * 150000 + Math.random() * 20000).toLocaleString();
+                costVal.innerText = `¥ ${currentCost}`;
+                
+                // Flow Up
+                cardL2.classList.remove('anim-active');
+                flowUp.classList.remove('opacity-30');
+                flowUp.classList.add('opacity-100', '-translate-y-2');
+                await new Promise(r => setTimeout(r, 600));
+                flowUp.classList.add('opacity-30');
+                flowUp.classList.remove('opacity-100', '-translate-y-2');
+            }
+
+            // Finish
+            costVal.innerText = "¥ 4,787,500 (Optimal)";
+            costVal.classList.add('text-teal-600');
+            runBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            runBtn.innerHTML = '<span>▶ 重新开始</span>';
+            isSimulating = false;
+        }
+    </script>
+</body>
+</html>
