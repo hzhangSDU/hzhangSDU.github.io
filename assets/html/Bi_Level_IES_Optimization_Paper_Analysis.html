@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论文深度解析：多源协同IES的双层优化设计</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #f0fdf4; color: #1e293b; }
+        
+        /* Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 350px;
+            max-height: 450px;
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Interactive Elements */
+        .component-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .component-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #22c55e;
+        }
+        .component-active {
+            border-color: #15803d;
+            background-color: #dcfce7;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
+
+        /* Optimization Process Animation */
+        .optim-step {
+            opacity: 0.5;
+            transition: all 0.5s ease;
+            border-left: 4px solid #cbd5e1;
+        }
+        .optim-step.active {
+            opacity: 1;
+            border-left-color: #16a34a;
+            background-color: #ffffff;
+            transform: scale(1.02);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .energy-tag {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .tag-elec { background: #fee2e2; color: #991b1b; } /* Electricity - High Exergy */
+        .tag-heat { background: #ffedd5; color: #9a3412; } /* Heat - Low Exergy */
+        .tag-gas { background: #e0f2fe; color: #075985; } /* Gas */
+    </style>
+    <!-- Chosen Palette: Nature Green (Biogas/Renewables) & Technical Slate (Optimization) -->
+    <!-- Application Structure Plan:
+         1. Hero: Title, Core Logic (Synergy of Renewables), Key Contribution.
+         2. System Exergy Hub: Visualizing the physical system. Interactive cards to explain the "Exergy Hub" model (Quality vs Quantity).
+         3. The Bi-Level Engine: A step-by-step interactive simulation of the Genetic Algorithm (Level 1) + SQP (Level 2) loop.
+         4. Data Clustering: Visualizing how 365 days are compressed into scenarios.
+         5. Results Dashboard: Comparing Cost vs. Exergy efficiency.
+         6. Dev Roadmap: How to implement this code.
+    -->
+    <!-- Visualization & Content Choices:
+         - System Topology: CSS Grid with emojis. Goal: Inform structure.
+         - Bi-Level Sim: Vertical stepper with JS logic. Goal: Explain complex algo.
+         - Scenarios: Chart.js Line chart. Goal: Show data clustering innovation.
+         - Results: Bar charts. Goal: Prove efficacy.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-green-50/50">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-green-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">🌿</span>
+                    <span class="text-xl font-bold text-slate-800">Biogas-IES Optimizer</span>
+                    <span class="ml-2 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full border border-green-200">2025 IEEE TIA 论文解析</span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="scrollToId('system')" class="text-slate-600 hover:text-green-600 font-medium">系统模型 (Exergy Hub)</button>
+                    <button onclick="scrollToId('algorithm')" class="text-slate-600 hover:text-green-600 font-medium">双层优化 (Bi-Level)</button>
+                    <button onclick="scrollToId('results')" class="text-slate-600 hover:text-green-600 font-medium">结果分析</button>
+                    <button onclick="scrollToId('implement')" class="text-slate-600 hover:text-green-600 font-medium">实现指南</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-br from-slate-900 to-green-900 text-white py-16">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                基于沼气-光伏-风能协同的<br>综合能源系统双层优化设计
+            </h1>
+            <p class="text-lg md:text-xl text-green-100 mb-8 max-w-3xl mx-auto">
+                解析 Zhang 等人 (2025) 的研究：如何通过引入“(火用) (Exergy)”分析与双层迭代算法，解决可再生能源不确定性下的容量配置与运行调度难题。
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-white/10 px-4 py-2 rounded-lg border border-green-500/30 backdrop-blur-sm">
+                    <span class="block text-xs text-green-300 uppercase tracking-wider">核心能源</span>
+                    <span class="font-bold">沼气 (Biogas) + 光伏 + 风能</span>
+                </div>
+                <div class="bg-white/10 px-4 py-2 rounded-lg border border-green-500/30 backdrop-blur-sm">
+                    <span class="block text-xs text-green-300 uppercase tracking-wider">建模创新</span>
+                    <span class="font-bold">(火用)枢纽模型 (Exergy Hub)</span>
+                </div>
+                <div class="bg-white/10 px-4 py-2 rounded-lg border border-green-500/30 backdrop-blur-sm">
+                    <span class="block text-xs text-green-300 uppercase tracking-wider">算法架构</span>
+                    <span class="font-bold">双层规划 (GA + SQP)</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <!-- SECTION 1: SYSTEM & EXERGY HUB -->
+        <section id="system">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-green-500 pl-4 mb-4">1. 系统架构与 (火用) 枢纽模型</h2>
+                <p class="text-lg text-slate-600 leading-relaxed max-w-4xl">
+                    本论文的一个核心创新是引入了热力学第二定律中的<strong>“(火用) (Exergy)”</strong>概念。传统模型只关注能量的“量”(Energy)，而本文关注能量的“质”。
+                    <br>系统不仅要满足电/热/冷负荷，还要确保高品位能量（如电）不被浪费在低品位需求（如低温供热）上。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- System Topology Visualization -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-lg border border-green-100 p-6">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">IES 物理拓扑结构 (点击组件查看数学定义)</h3>
+                    
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <!-- Source Column -->
+                        <div class="space-y-4">
+                            <div class="font-bold text-green-700 bg-green-50 py-1 rounded">能源输入</div>
+                            <div class="component-card bg-slate-50 p-4 rounded-lg" onclick="showDetail('solar')">
+                                <div class="text-3xl">☀️</div>
+                                <div class="font-bold mt-2">光伏 (PV)</div>
+                                <div class="text-xs text-slate-500">Exergy ≈ Energy</div>
+                            </div>
+                            <div class="component-card bg-slate-50 p-4 rounded-lg" onclick="showDetail('wind')">
+                                <div class="text-3xl">💨</div>
+                                <div class="font-bold mt-2">风机 (WT)</div>
+                            </div>
+                            <div class="component-card bg-green-50 p-4 rounded-lg border-green-200" onclick="showDetail('biogas')">
+                                <div class="text-3xl">🍂➡🔥</div>
+                                <div class="font-bold mt-2">厌氧发酵 (AD)</div>
+                                <div class="text-xs text-green-600">核心稳定源</div>
+                            </div>
+                        </div>
+
+                        <!-- Conversion Column -->
+                        <div class="space-y-4 pt-12">
+                            <div class="font-bold text-blue-700 bg-blue-50 py-1 rounded">转换与存储</div>
+                            <div class="component-card bg-blue-50 p-4 rounded-lg border-blue-200" onclick="showDetail('bpgu')">
+                                <div class="text-3xl">⚙️</div>
+                                <div class="font-bold mt-2">沼气发电机 (BPGU)</div>
+                                <div class="text-xs text-slate-500">热电联产 CHP</div>
+                            </div>
+                            <div class="component-card bg-slate-50 p-4 rounded-lg" onclick="showDetail('conversion')">
+                                <div class="text-2xl">❄️ 🔥</div>
+                                <div class="font-bold mt-1">电/吸制冷 & 锅炉</div>
+                                <div class="text-xs text-slate-500">EC, AC, GB</div>
+                            </div>
+                            <div class="component-card bg-yellow-50 p-4 rounded-lg border-yellow-200" onclick="showDetail('storage')">
+                                <div class="text-3xl">🔋</div>
+                                <div class="font-bold mt-2">储热 (HS)</div>
+                                <div class="text-xs text-slate-500">灵活调节</div>
+                            </div>
+                        </div>
+
+                        <!-- Load Column -->
+                        <div class="space-y-4">
+                            <div class="font-bold text-red-700 bg-red-50 py-1 rounded">负荷需求</div>
+                            <div class="bg-slate-50 p-4 rounded-lg opacity-80">
+                                <div class="text-3xl">💡</div>
+                                <div class="font-bold mt-2">电负荷</div>
+                                <span class="energy-tag tag-elec">高品位 (λ=1)</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg opacity-80">
+                                <div class="text-3xl">🛁</div>
+                                <div class="font-bold mt-2">热负荷</div>
+                                <span class="energy-tag tag-heat">低品位 (λ<0.2)</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg opacity-80">
+                                <div class="text-3xl">❄️</div>
+                                <div class="font-bold mt-2">冷负荷</div>
+                                <span class="energy-tag tag-heat">低品位</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Panel -->
+                <div class="bg-slate-800 text-white rounded-xl p-6 shadow-xl flex flex-col">
+                    <h3 class="text-xl font-bold text-green-400 mb-4 border-b border-slate-600 pb-2">组件详情解析</h3>
+                    <div id="component-detail" class="flex-grow space-y-4">
+                        <p class="text-slate-300 italic">请点击左侧组件查看其数学模型与 (火用) 分析意义。</p>
+                        <div class="mt-8 bg-slate-700/50 p-4 rounded border border-slate-600">
+                            <h4 class="font-bold text-green-300 mb-2">什么是能质系数 (EQC)?</h4>
+                            <p class="text-sm text-slate-300">
+                                公式: $\lambda = 1 - \frac{T_0}{T}$ <br>
+                                论文使用 EQC ($\lambda$) 将能量数量转换为 (火用)。
+                                <br>例如：电的 $\lambda=1$，而 60°C热水的 $\lambda \approx 0.15$。
+                                <br><strong>设计目标：</strong> 避免用高 $\lambda$ 能源去满足低 $\lambda$ 需求。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: BI-LEVEL OPTIMIZATION -->
+        <section id="algorithm">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-blue-500 pl-4 mb-4">2. 核心引擎：双层优化算法</h2>
+                <p class="text-lg text-slate-600 leading-relaxed max-w-4xl">
+                    容量配置（建多大？）与运行调度（怎么用？）是强耦合的。论文提出了一种<strong>双层迭代优化方法</strong>。
+                    <br>上层使用<strong>遗传算法 (GA)</strong> 决定设备容量；下层使用<strong>序列二次规划 (SQP)</strong> 在给定容量下优化运行策略（包含需求响应 DR）。
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <!-- Visualization of the Loop -->
+                    <div class="p-8 bg-slate-50 border-r border-slate-200 relative">
+                        <h3 class="font-bold text-lg text-slate-700 mb-6">双层迭代逻辑示意</h3>
+                        
+                        <!-- Level 1 -->
+                        <div id="step-1" class="optim-step p-4 rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-blue-800">第一层 (Level 1): 容量规划</span>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">算法: GA</span>
+                            </div>
+                            <p class="text-sm text-slate-600">
+                                <strong>决策变量:</strong> 沼气产量 ($D_{bio}$), BPGU容量, 电制冷容量, 储热容量。<br>
+                                <strong>目标:</strong> 最大化年成本节约率 (ACSR) + 年(火用)节约率 (AESR)。
+                            </p>
+                        </div>
+
+                        <div class="flow-arrow">⬇️ 传递容量参数 ($N_{BPGU}, N_{HS}...$) ⬇️</div>
+
+                        <!-- Level 2 -->
+                        <div id="step-2" class="optim-step p-4 rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-green-800">第二层 (Level 2): 运行优化</span>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">算法: SQP</span>
+                            </div>
+                            <p class="text-sm text-slate-600">
+                                <strong>决策变量:</strong> 逐时出力计划, 需求响应 (DR) 负荷转移。<br>
+                                <strong>目标:</strong> 最小化日运行成本 + 日(火用)损耗。<br>
+                                <strong>处理:</strong> 针对聚类出的 8 个典型日分别优化。
+                            </p>
+                        </div>
+
+                        <div class="flow-arrow">⬆️ 反馈运行成本 & (火用)效率 ⬆️</div>
+                        
+                        <!-- Loop Control -->
+                        <div class="mt-6 flex justify-center">
+                            <button id="run-optim-btn" onclick="runOptimizationSim()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105">
+                                ▶️ 运行模拟迭代
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Log Console -->
+                    <div class="p-8 bg-slate-900 text-green-400 font-mono text-sm overflow-y-auto h-[500px]" id="console-log">
+                        <div class="border-b border-slate-700 pb-2 mb-2 text-white">System Optimization Log...</div>
+                        <p class="opacity-50">> 等待开始...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: CLUSTERING & SCENARIOS -->
+        <section id="scenarios">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-purple-500 pl-4 mb-4">3. 全时序聚类：从 365 天到 8 个典型日</h2>
+                <p class="text-lg text-slate-600 leading-relaxed max-w-4xl">
+                    为了降低计算复杂度，论文没有优化全年的 8760 小时，而是提出了一种<strong>基于多属性加权的全时序聚类方法</strong>。
+                    <br>该方法考虑了季节性、周期性和随机性，将全年数据压缩为 8 个典型场景（如：供暖季典型日、供冷季典型日、过渡季典型日）。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4">典型场景示例 (Scenario 7 - 供暖季)</h3>
+                    <div class="chart-container">
+                        <canvas id="scenarioChart"></canvas>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-2 text-center">
+                        图示：典型供暖日的电、热负荷及光伏/风电出力曲线。
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center">
+                    <h3 class="font-bold text-slate-700 mb-4">聚类方法的步骤</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded mr-3">1</span>
+                            <span class="text-slate-600"><strong>归一化:</strong> 处理不同量纲的数据 (光伏 kW, 温度 °C, 负荷 kW)。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded mr-3">2</span>
+                            <span class="text-slate-600"><strong>加法模型分解:</strong> 将时间序列分解为趋势项、周期项和随机项。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded mr-3">3</span>
+                            <span class="text-slate-600"><strong>多属性加权:</strong> 创新点。根据数据的波动特征计算权重 $W_j$，更关注波动大的数据源。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded mr-3">4</span>
+                            <span class="text-slate-600"><strong>K-Means 聚类:</strong> 最终输出 8 个典型场景及对应的天数权重。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: RESULTS -->
+        <section id="results" class="bg-white rounded-2xl p-8 shadow-sm border border-green-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-red-500 pl-4 mb-4">4. 优化结果对比</h2>
+                <p class="text-lg text-slate-600 max-w-4xl">
+                    通过与仅考虑经济性的单层优化（Case 4）或不含沼气的方案（Case 5）对比，本文提出的双层多目标优化（Case 1-3）展现了显著优势。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Result Chart 1 -->
+                <div>
+                    <h3 class="font-bold text-center text-slate-700 mb-4">不同案例的年度成本与 (火用) 效率</h3>
+                    <div class="chart-container h-64">
+                        <canvas id="resultBarChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Key Findings Text -->
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-800">发现 1: 协同优化的价值</h4>
+                        <p class="text-sm text-green-700 mt-1">
+                            引入需求响应 (DR) 和运行优化后，系统的年成本节约率 (ACSR) 显著提升。例如，Case 3 (双层经济优化) 比 Case 4 (单层固定策略) 的投资回收期更短 (3.7年 vs 4.5年)。
+                        </p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-800">发现 2: (火用) 效率与成本的权衡</h4>
+                        <p class="text-sm text-blue-700 mt-1">
+                            Case 1 (同时考虑成本与(火用)) 虽然总成本略高于 Case 3，但其年(火用)节约率 (AESR) 高达 79.21%，远超 Case 3 的 56.62%。这证明了 Exergy Hub 模型在提升能源品质利用上的有效性。
+                        </p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                        <h4 class="font-bold text-orange-800">发现 3: 沼气的稳定性</h4>
+                        <p class="text-sm text-orange-700 mt-1">
+                            相比天然气系统 (Case 5)，沼气系统虽然初始投资高（建设发酵罐），但运行成本大幅降低，且碳排放极低。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: IMPLEMENTATION -->
+        <section id="implement" class="mb-20">
+            <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-slate-500 pl-4 mb-6">5. 开发者指南：如何复现?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-2">Step 1: 建模基础</h3>
+                    <ul class="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                        <li><strong>工具:</strong> Matlab / Python</li>
+                        <li><strong>求解器:</strong> 建议使用 Gurobi 或 CPLEX 处理下层的 SQP/线性规划部分。</li>
+                        <li><strong>Exergy 计算:</strong> 需要编写函数，根据温度计算冷/热的能质系数 ($\lambda$)。</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-2">Step 2: 沼气发酵模型</h3>
+                    <ul class="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                        <li>这是一个热力学过程。</li>
+                        <li>关键公式：产气率与温度的关系 (Eq 1)。</li>
+                        <li><strong>约束:</strong> 发酵罐温度需维持在 35°C，需要计算热损耗并由 BPGU 余热补充。</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-2">Step 3: 算法混合</h3>
+                    <ul class="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                        <li><strong>外层 (GA):</strong> 种群大小设为 100，迭代 200 次。变量是整数或连续值（设备容量）。</li>
+                        <li><strong>内层 (SQP):</strong> 对于 GA 的每个个体，调用 SQP 求解 8 个典型日的调度。</li>
+                        <li><strong>注意:</strong> 计算量大，建议使用多线程并行计算适应度。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-8 text-center">
+        <p>Generated based on: Zhang et al., "Bi-level Optimal Design of Integrated Energy System..." (2025)</p>
+    </footer>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // --- Data & Logic ---
+
+        // Component Details content
+        const componentData = {
+            'solar': {
+                title: '光伏 (PV)',
+                content: '直接将太阳辐照转化为电能。<br><strong>Exergy 特性:</strong> 电能的能质系数 $\\lambda = 1$，属于高品位能源。在模型中，光伏出力优先满足电负荷，多余部分可上网或驱动热泵。'
+            },
+            'wind': {
+                title: '风机 (WT)',
+                content: '将风动能转化为电能。<br><strong>特点:</strong> 输出具有随机性。在聚类算法中，风速的随机性是权重计算的重要因子。'
+            },
+            'biogas': {
+                title: '厌氧发酵 (AD)',
+                content: '本论文的核心模块。利用生物质（如秸秆、粪便）产生沼气。<br><strong>热力学模型:</strong> 产气率 $\\gamma_{CH4}$ 是温度的函数。需要 BPGU 的余热来维持 35°C 恒温发酵。这是"能源-废弃物处理"的协同。'
+            },
+            'bpgu': {
+                title: '沼气发电机 (BPGU)',
+                content: '热电联产核心。燃烧沼气，产电 + 产热。<br><strong>耦合点:</strong> 产生的热量首先用于维持 AD 发酵温度，剩余热量供给用户或储热。'
+            },
+            'conversion': {
+                title: '多能转换设备',
+                content: '<strong>EC (电制冷):</strong> 消耗高品位电，产出低品位冷 (COP高)。<br><strong>AC (吸收式制冷):</strong> 消耗低品位热，产出冷。<br><strong>GB (燃气锅炉):</strong> 补充热源，效率约 0.9。'
+            },
+            'storage': {
+                title: '储热 (HS)',
+                content: '<strong>灵活性来源:</strong> 解决热负荷与 BPGU 发电时刻不匹配的问题。在第二层优化中，HS 的充放策略是关键决策变量。'
+            }
+        };
+
+        function showDetail(key) {
+            const data = componentData[key];
+            const panel = document.getElementById('component-detail');
+            panel.innerHTML = `
+                <div class="animate-pulse">
+                    <h4 class="text-xl font-bold text-green-300 mb-2">${data.title}</h4>
+                    <p class="text-slate-200 leading-relaxed">${data.content}</p>
+                    <div class="mt-4 pt-4 border-t border-slate-600 text-xs text-slate-400">
+                        * 可以在论文 Section II 中找到详细数学公式。
+                    </div>
+                </div>
+            `;
+            
+            // Highlight visual feedback
+            document.querySelectorAll('.component-card').forEach(el => el.classList.remove('component-active'));
+            // Use event.currentTarget in a real app, here simplifying for single file
+        }
+
+        // --- Optimization Simulation Logic ---
+        async function runOptimizationSim() {
+            const btn = document.getElementById('run-optim-btn');
+            const consoleLog = document.getElementById('console-log');
+            const step1 = document.getElementById('step-1');
+            const step2 = document.getElementById('step-2');
+
+            if(btn.disabled) return;
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+            consoleLog.innerHTML = ""; // Clear
+
+            const log = (text, color="text-white") => {
+                const p = document.createElement('p');
+                p.className = `mb-1 ${color} font-mono`;
+                p.innerHTML = `> ${text}`;
+                consoleLog.appendChild(p);
+                consoleLog.scrollTop = consoleLog.scrollHeight;
+            };
+
+            // Simulation Loop
+            let generation = 1;
+            const maxGen = 5; // Demo only
+
+            log("初始化双层优化算法...", "text-blue-300");
+            await new Promise(r => setTimeout(r, 800));
+
+            while (generation <= maxGen) {
+                // Level 1
+                step1.classList.add('active');
+                step2.classList.remove('active');
+                log(`[Generation ${generation}] GA 正在生成容量种群...`, "text-blue-400");
+                log(`  - 个体 1: BPGU=120kW, HS=40kWh`, "text-slate-400");
+                await new Promise(r => setTimeout(r, 1000));
+
+                // Level 2
+                step1.classList.remove('active');
+                step2.classList.add('active');
+                log(`  [Level 2] SQP 正在优化 8 个典型日运行策略...`, "text-green-400");
+                await new Promise(r => setTimeout(r, 600));
+                log(`    - Scenario 1 (Heating): 优化完毕.`, "text-slate-500");
+                await new Promise(r => setTimeout(r, 200));
+                log(`    - Scenario 2 (Cooling): 优化完毕.`, "text-slate-500");
+                log(`  [Level 2] 返回适应度: Annual Cost = ¥${(80 - generation*2).toFixed(1)}万`, "text-green-300");
+                
+                await new Promise(r => setTimeout(r, 800));
+                generation++;
+            }
+
+            step1.classList.remove('active');
+            step2.classList.remove('active');
+            log("优化收敛! 最优解已找到。", "text-yellow-400 font-bold");
+            log("最优配置: BPGU=125kW, AC=222kW, GB=429kW", "text-white");
+            
+            btn.disabled = false;
+            btn.classList.remove('opacity-50');
+        }
+
+        // --- Chart.js Implementations ---
+        function initCharts() {
+            // 1. Scenario Chart (Mocking Fig 5 Scenario 7)
+            const ctxScenario = document.getElementById('scenarioChart').getContext('2d');
+            new Chart(ctxScenario, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                    datasets: [
+                        {
+                            label: '电负荷 (kW)',
+                            data: [160,150,140,130,120,130,160,200,220,250,280,260,240,220,200,220,240,280,300,280,250,220,180,160], // Roughly copied visual trend
+                            borderColor: '#ef4444', // Red for load
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: '光伏出力 (kW)',
+                            data: [0,0,0,0,0,0,10,40,80,120,140,130,100,60,20,5,0,0,0,0,0,0,0,0],
+                            borderColor: '#eab308', // Yellow
+                            backgroundColor: 'rgba(234, 179, 8, 0.2)',
+                            fill: true,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: '风电出力 (kW)',
+                            data: [20,20,18,18,25,30,35,30,25,20,15,15,20,25,28,30,32,30,25,20,15,10,10,10],
+                            borderColor: '#3b82f6', // Blue
+                            borderWidth: 2,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { title: {display: true, text: '功率 (kW)'} }
+                    }
+                }
+            });
+
+            // 2. Result Bar Chart (Mocking Table VI trends)
+            const ctxResult = document.getElementById('resultBarChart').getContext('2d');
+            new Chart(ctxResult, {
+                type: 'bar',
+                data: {
+                    labels: ['Case 1 (双层协同)', 'Case 3 (仅经济)', 'Case 4 (无运行优化)', 'Case 5 (天然气IES)'],
+                    datasets: [
+                        {
+                            label: '年总成本 (万元)',
+                            data: [90.46, 77.70, 86.47, 79.71],
+                            backgroundColor: '#94a3b8',
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '年(火用)节约率 AESR (%)',
+                            data: [79.21, 56.62, 52.0, 45.0], // Approx data from paper text/tables
+                            backgroundColor: '#22c55e',
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {display: true, text: '成本 (万元)'}
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {display: true, text: 'AESR (%)'},
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Navigation Helper
+        function scrollToId(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Init
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            // Show default detail
+            showDetail('biogas');
+        });
+
+    </script>
+</body>
+</html>
