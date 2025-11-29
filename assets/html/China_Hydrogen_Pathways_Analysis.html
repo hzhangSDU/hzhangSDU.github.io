@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国多种制氢路径的经济与环境竞争力解析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #f0f9ff; color: #0f172a; }
+        
+        /* Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 350px;
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Pathway Cards */
+        .pathway-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .pathway-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+        .pathway-active {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+            transform: scale(1.02);
+        }
+
+        /* Timeline Marker */
+        .timeline-point {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #cbd5e1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+        .timeline-point:hover, .timeline-point.active {
+            background-color: #3b82f6;
+            transform: scale(1.5);
+        }
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e2e8f0;
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+    <!-- Chosen Palette: Hydrogen Blue (Core) & Eco Green (Sustainability) -->
+    <!-- Application Structure Plan:
+         1. Hero Section: Paper Title, Key Conclusion (Off-grid is future), Authors.
+         2. The 4 Pathways: Interactive cards defining WE1, WE2, WE3, WE4. Explaining the configuration differences.
+         3. Current Competitiveness:
+            - Chart 1: LCOH (Cost) Range across 31 Provinces.
+            - Chart 2: LCCE (Carbon) comparison. Highlighting the "North vs South" divide.
+         4. Future Projection (2025-2050): Interactive Timeline showing when Off-grid becomes cheaper (The "Turning Points").
+         5. Optimization Methodology: Explaining the MILP model logic.
+         6. Dev Roadmap: How to reproduce this study.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-blue-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">💧</span>
+                    <div>
+                        <span class="text-lg font-bold text-slate-800 block leading-tight">China Hydrogen Pathways</span>
+                        <span class="text-xs text-blue-600 font-medium">Nature Comm. 2025 论文复现</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="scrollToId('pathways')" class="text-slate-600 hover:text-blue-600 font-medium">四种路径</button>
+                    <button onclick="scrollToId('analysis')" class="text-slate-600 hover:text-blue-600 font-medium">经济性分析</button>
+                    <button onclick="scrollToId('future')" class="text-slate-600 hover:text-blue-600 font-medium">未来展望</button>
+                    <button onclick="scrollToId('method')" class="text-slate-600 hover:text-blue-600 font-medium">复现指南</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-blue-900 to-slate-900 text-white py-20 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-10 opacity-10 text-9xl">🇨🇳</div>
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+            <div class="inline-block bg-blue-500/20 backdrop-blur border border-blue-400/30 px-4 py-1 rounded-full text-blue-200 text-sm mb-6">
+                基于中国 31 个省份的精细化评估
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+                中国多种制氢路径的<br>经济与环境竞争力全景解析
+            </h1>
+            <p class="text-lg text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Fan et al. (2025) 利用优化方法量化了四种电解水制氢系统在全国范围内的平准化氢成本 (LCOH) 和全生命周期碳排放 (LCCE)。
+                <br><strong class="text-white">结论：</strong> 离网制氢 (WE4) 将在 2045-2050 年成为最经济的路径。
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-white/10 px-6 py-3 rounded-lg border border-blue-500/30">
+                    <span class="block text-xs text-blue-300 uppercase">当前成本最低</span>
+                    <span class="font-bold">工业副产氢 / 煤制氢</span>
+                </div>
+                <div class="bg-white/10 px-6 py-3 rounded-lg border border-blue-500/30">
+                    <span class="block text-xs text-blue-300 uppercase">未来潜力之星</span>
+                    <span class="font-bold">离网电解水 (WE4)</span>
+                </div>
+                <div class="bg-white/10 px-6 py-3 rounded-lg border border-blue-500/30">
+                    <span class="block text-xs text-blue-300 uppercase">政策工具</span>
+                    <span class="font-bold">分时电价 / 碳补贴</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <!-- SECTION 1: THE 4 PATHWAYS -->
+        <section id="pathways">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-blue-500 pl-4 mb-4">1. 定义四种电解水制氢系统</h2>
+                <p class="text-slate-600 max-w-3xl">
+                    论文构建了四种不同配置的电解水制氢系统 (WE1-WE4)，以适应不同省份的资源禀赋。
+                    <br>点击下方卡片查看系统配置与优缺点。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- Card WE1 -->
+                <div class="pathway-card bg-white p-6 rounded-xl shadow-sm pathway-active" onclick="selectPathway('we1', this)">
+                    <div class="text-4xl mb-4">🔌</div>
+                    <h3 class="font-bold text-lg text-slate-800">WE1: 网电制氢</h3>
+                    <p class="text-xs text-slate-500 mt-2">Grid Hydrogen Production</p>
+                </div>
+                <!-- Card WE2 -->
+                <div class="pathway-card bg-white p-6 rounded-xl shadow-sm" onclick="selectPathway('we2', this)">
+                    <div class="text-4xl mb-4">☀️+🔌</div>
+                    <h3 class="font-bold text-lg text-slate-800">WE2: 光伏+网电</h3>
+                    <p class="text-xs text-slate-500 mt-2">PV + Grid Combined</p>
+                </div>
+                <!-- Card WE3 -->
+                <div class="pathway-card bg-white p-6 rounded-xl shadow-sm" onclick="selectPathway('we3', this)">
+                    <div class="text-4xl mb-4">⚖️</div>
+                    <h3 class="font-bold text-lg text-slate-800">WE3: 定比例可再生</h3>
+                    <p class="text-xs text-slate-500 mt-2">Fixed Renewable Penetration (50%)</p>
+                </div>
+                <!-- Card WE4 -->
+                <div class="pathway-card bg-white p-6 rounded-xl shadow-sm" onclick="selectPathway('we4', this)">
+                    <div class="text-4xl mb-4">🏝️</div>
+                    <h3 class="font-bold text-lg text-slate-800">WE4: 离网制氢</h3>
+                    <p class="text-xs text-slate-500 mt-2">Off-grid (100% RE)</p>
+                </div>
+            </div>
+
+            <!-- Detail View -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-blue-100 flex flex-col md:flex-row gap-8 items-center" id="pathway-detail-container">
+                <div class="w-full md:w-1/3 text-center">
+                    <div class="text-9xl mb-4" id="detail-icon">🔌</div>
+                    <div class="text-sm font-bold bg-blue-100 text-blue-800 inline-block px-3 py-1 rounded-full" id="detail-tag">当前主流 (但高碳)</div>
+                </div>
+                <div class="w-full md:w-2/3">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4" id="detail-title">WE1: 网电制氢系统</h3>
+                    <div class="space-y-4">
+                        <p class="text-slate-600" id="detail-desc">
+                            电力完全来自电网。电解槽容量根据每小时产氢量直接计算。
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-3 rounded border border-slate-200">
+                                <span class="block text-xs text-slate-400 uppercase">优势</span>
+                                <span class="font-bold text-green-600" id="detail-pros">设备配置简单，初投资低。</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded border border-slate-200">
+                                <span class="block text-xs text-slate-400 uppercase">劣势</span>
+                                <span class="font-bold text-red-600" id="detail-cons">受电网碳排放因子影响极大，在北方高碳电网地区并不环保。</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded border-l-4 border-blue-500 text-sm text-blue-800">
+                            <strong>数据洞察：</strong> 在当前电价下，WE1 的成本主要由购电成本决定 (占比 71%-82%)。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: CURRENT STATUS ANALYSIS -->
+        <section id="analysis">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-green-500 pl-4 mb-4">2. 现状分析：成本与碳排的空间差异</h2>
+                <p class="text-slate-600 max-w-3xl">
+                    中国幅员辽阔，各省份的资源禀赋（光照、电价）和电网清洁度（碳因子）差异巨大。
+                    <br>论文计算了 31 个省份的数据，发现了显著的<strong>“北低南高”</strong>成本分布和<strong>“北高南低”</strong>碳排分布。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Cost Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4 flex justify-between">
+                        <span>💰 平准化氢成本 (LCOH) 分布范围</span>
+                        <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-500">单位: $/kg H2</span>
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="lcohChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-3 text-center">
+                        注：WE4 (离网) 目前成本最高，因为需要配置大量的储能和储氢罐以保证稳定供氢。
+                    </p>
+                </div>
+
+                <!-- Carbon Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4 flex justify-between">
+                        <span>🌿 全生命周期碳排放 (LCCE)</span>
+                        <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-500">单位: kg CO2/kg H2</span>
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="lcceChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-3 text-center">
+                        惊人发现：在河北等煤电大省，WE1 (网电制氢) 的碳排放甚至高于煤制氢 (CG, ~22.7 kg)。
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Insight Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <div class="text-2xl mb-2">🏔️ 青海 & 西藏</div>
+                    <p class="text-sm text-green-800">
+                        <strong>最佳绿氢潜力区：</strong> 得益于丰富的光照和清洁的电网，这里是目前 WE1/WE2 碳排放最低的区域。
+                    </p>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <div class="text-2xl mb-2">🏭 18 个省份</div>
+                    <p class="text-sm text-yellow-800">
+                        <strong>WE2 优于 WE1：</strong> 在北京、山东、广东等18个省份，配置光伏 (WE2) 比单纯用网电 (WE1) 更经济。
+                    </p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div class="text-2xl mb-2">📉 分时电价</div>
+                    <p class="text-sm text-blue-800">
+                        <strong>政策红利：</strong> 实施分时电价可使 WE1 成本降低 $0.18-0.90/kg，极大提升经济性。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FUTURE PROJECTION -->
+        <section id="future" class="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full blur-3xl opacity-20 -mr-20 -mt-20"></div>
+            
+            <div class="relative z-10">
+                <div class="mb-10 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">未来展望 (2025-2050)</h2>
+                    <p class="text-blue-200 text-lg">
+                        离网制氢 (WE4) 何时能打败化石燃料制氢？<br>
+                        点击时间轴，查看不同年份的预测格局。
+                    </p>
+                </div>
+
+                <!-- Interactive Timeline -->
+                <div class="relative max-w-4xl mx-auto h-24 mb-8 flex justify-between items-center px-4">
+                    <div class="timeline-line"></div>
+                    <!-- Points -->
+                    <div class="timeline-point active" onclick="updateYear(2025, this)" title="2025"></div>
+                    <div class="timeline-point" onclick="updateYear(2035, this)" title="2035"></div>
+                    <div class="timeline-point" onclick="updateYear(2045, this)" title="2045"></div>
+                    <div class="timeline-point" onclick="updateYear(2050, this)" title="2050"></div>
+                    
+                    <!-- Labels -->
+                    <div class="absolute top-12 left-0 w-full flex justify-between text-sm font-mono text-blue-300 px-2">
+                        <span>2025</span>
+                        <span>2035</span>
+                        <span>2045</span>
+                        <span>2050</span>
+                    </div>
+                </div>
+
+                <!-- Dynamic Content Area -->
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 transition-all duration-500" id="year-content">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2">
+                            <h3 class="text-2xl font-bold text-white mb-2" id="year-title">2025: 起步阶段</h3>
+                            <p class="text-blue-100 leading-relaxed" id="year-desc">
+                                当前，化石燃料制氢（煤制氢、工业副产氢）成本最低。离网电解水 (WE4) 成本高昂 ($7.3-14.8/kg)，主要受限于储能成本。
+                            </p>
+                            <div class="mt-4 flex gap-2">
+                                <span class="bg-blue-600 px-3 py-1 rounded text-xs font-bold">成本王: 工业副产氢</span>
+                                <span class="bg-slate-600 px-3 py-1 rounded text-xs font-bold">WE4: 昂贵</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <!-- Simple Bar Chart Visualization for the Year -->
+                            <div class="h-48 w-full bg-slate-800/50 rounded-lg p-4 relative flex items-end justify-around gap-2">
+                                <div class="w-12 bg-slate-500 hover:bg-slate-400 transition-all rounded-t relative group" style="height: 90%;" id="bar-we4">
+                                    <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs">WE4</span>
+                                </div>
+                                <div class="w-12 bg-blue-500 hover:bg-blue-400 transition-all rounded-t relative group" style="height: 60%;" id="bar-we1">
+                                    <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs">WE1</span>
+                                </div>
+                                <div class="w-12 bg-green-500 hover:bg-green-400 transition-all rounded-t relative group" style="height: 30%;" id="bar-fossil">
+                                    <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs">Fossil</span>
+                                </div>
+                            </div>
+                            <p class="text-center text-xs text-slate-400 mt-2">相对成本示意图</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-center text-slate-400 text-xs mt-6">
+                    * 预测基于设备成本下降曲线（PV、电解槽、电池）及碳税增长假设。
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 4: METHODOLOGY & REPLICATION -->
+        <section id="method">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 border-l-8 border-slate-500 pl-4 mb-4">4. 研究方法与复现指南</h2>
+                <p class="text-slate-600 max-w-3xl">
+                    本研究的核心是一个**混合整数线性规划 (MILP)** 模型，旨在最小化 LCOH。
+                    如果您想复现此研究，请遵循以下技术路线。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="text-4xl mb-4 text-blue-500">01</div>
+                    <h3 class="font-bold text-lg mb-2">数据收集 (Inputs)</h3>
+                    <ul class="text-sm text-slate-600 space-y-2 list-disc pl-4">
+                        <li><strong>光伏数据:</strong> 使用 NREL PVWatts Calculator 获取 31 个省份逐时发电数据。</li>
+                        <li><strong>电价数据:</strong> 各省电网公司的销售电价表（含单一制与分时电价）。</li>
+                        <li><strong>碳因子:</strong> 中国各省电网平均二氧化碳排放因子。</li>
+                    </ul>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="text-4xl mb-4 text-blue-500">02</div>
+                    <h3 class="font-bold text-lg mb-2">构建优化模型 (MILP)</h3>
+                    <ul class="text-sm text-slate-600 space-y-2 list-disc pl-4">
+                        <li><strong>目标函数:</strong> Min LCOH (平准化氢成本)。</li>
+                        <li><strong>决策变量:</strong> PV容量、电解槽容量、储能容量、逐时运行功率。</li>
+                        <li><strong>关键约束:</strong> 
+                            <span class="block bg-slate-100 p-1 rounded mt-1 font-mono text-xs">Hydrogen_Supply(t) = 1 kg/h (可靠性约束)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="text-4xl mb-4 text-blue-500">03</div>
+                    <h3 class="font-bold text-lg mb-2">求解与分析 (Solver)</h3>
+                    <ul class="text-sm text-slate-600 space-y-2 list-disc pl-4">
+                        <li><strong>平台:</strong> Matlab + Yalmip 工具箱。</li>
+                        <li><strong>求解器:</strong> Gurobi (处理大规模 MILP 问题效率最高)。</li>
+                        <li><strong>输出:</strong> 各省最优配置方案 (IC_PV, IC_EL, IC_EES) 及对应的 LCOH/LCCE。</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-slate-100 p-4 rounded-lg text-sm text-slate-600 font-mono">
+                <strong>核心公式 (LCOH):</strong><br>
+                LCOH = (总投资成本 + 全生命周期运维成本 + 购电成本 + 碳税成本) / 全生命周期总产氢量
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-2">解析基于论文: <strong>Economic and environmental competitiveness of multiple hydrogen production pathways in China</strong></p>
+            <p class="text-sm opacity-60">Nature Communications | Published: 08 May 2025 | Authors: Fan et al.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // --- DATA & CONTENT ---
+        
+        const pathwayDetails = {
+            'we1': {
+                icon: '🔌', tag: '当前成本依赖型',
+                title: 'WE1: 网电制氢系统',
+                desc: '完全依赖电网供电。不需要配置光伏或储能，电解槽容量根据产氢需求固定 (约 54.3 kW/(kg/h))。',
+                pros: '初投资最低，设备利用率高。',
+                cons: '运行成本高（电费占比高），碳排放高（受火电影响大）。'
+            },
+            'we2': {
+                icon: '☀️+🔌', tag: '分布式优选',
+                title: 'WE2: 光伏+网电联合系统',
+                desc: '优先使用自建光伏供电，不足部分由电网补充。这种“自发自用，余电上网”模式在光照好的地区非常划算。',
+                pros: '在 18 个省份比 WE1 更经济，碳排放更低。',
+                cons: '需要安装光伏板，占地面积增加。'
+            },
+            'we3': {
+                icon: '⚖️', tag: '绿色过渡',
+                title: 'WE3: 固定可再生能源渗透率 (50%)',
+                desc: '强制要求 50% 的电力来自可再生能源。这需要配置储能系统来平衡光伏的波动性。',
+                pros: '显著降低碳排放，摆脱对高碳电网的完全依赖。',
+                cons: '因配置储能 (Battery) 和储氢罐，投资成本上升 (占比 29%-43%)。'
+            },
+            'we4': {
+                icon: '🏝️', tag: '未来终极形态',
+                title: 'WE4: 离网制氢系统 (100% RE)',
+                desc: '完全不连接电网。依靠光伏+电池+储氢罐实现 100% 绿氢。为了保证每小时稳定供氢，需要巨大的储能冗余。',
+                pros: '近零碳排放 (< 2.37 kg CO2)，不受电网价格波动影响。',
+                cons: '目前成本极高 ($7.3-14.8/kg)，投资成本占比超过 50%。'
+            }
+        };
+
+        const yearData = {
+            2025: {
+                title: '2025: 起步阶段',
+                desc: '当前，WE4 (离网) 成本远高于化石能源制氢。煤制氢 (CG) 和工业副产氢 (IBP) 仍是主流。电网制氢 (WE1) 在高电价地区缺乏竞争力。',
+                bars: [90, 60, 20] // WE4, WE1, Fossil (Relative height)
+            },
+            2035: {
+                title: '2035: 关键转折点 (Key Point 1)',
+                desc: '随着光伏和电池成本下降，WE4 的 LCOH 可能降至低于 WE1 和 WE2 的水平。这意味着离网模式开始展现经济优势。',
+                bars: [50, 55, 25]
+            },
+            2045: {
+                title: '2045: 赶超化石能源',
+                desc: '预测显示，WE4 成本将低于“煤制氢+CCS”。此时，离网绿氢在经济性和环保性上双双胜出。',
+                bars: [30, 45, 35]
+            },
+            2050: {
+                title: '2050: 绿氢时代',
+                desc: 'WE4 将成为最经济的制氢方式 (约 $2.2/kg)，甚至低于工业副产氢。如果有碳税或补贴政策，这一天可能提前 5-15 年到来。',
+                bars: [20, 40, 40] // Fossil cost rises due to carbon tax
+            }
+        };
+
+        // --- FUNCTIONS ---
+
+        function selectPathway(id, card) {
+            // UI Update
+            document.querySelectorAll('.pathway-card').forEach(c => c.classList.remove('pathway-active'));
+            card.classList.add('pathway-active');
+
+            // Content Update
+            const data = pathwayDetails[id];
+            const container = document.getElementById('pathway-detail-container');
+            
+            // Simple fade effect
+            container.style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('detail-icon').innerText = data.icon;
+                document.getElementById('detail-tag').innerText = data.tag;
+                document.getElementById('detail-title').innerText = data.title;
+                document.getElementById('detail-desc').innerText = data.desc;
+                document.getElementById('detail-pros').innerText = data.pros;
+                document.getElementById('detail-cons').innerText = data.cons;
+                container.style.opacity = 1;
+            }, 200);
+        }
+
+        function updateYear(year, dot) {
+            // UI Update
+            document.querySelectorAll('.timeline-point').forEach(p => p.classList.remove('active'));
+            dot.classList.add('active');
+
+            const data = yearData[year];
+            const content = document.getElementById('year-content');
+            
+            // Animate Bar Chart
+            const barWE4 = document.getElementById('bar-we4');
+            const barWE1 = document.getElementById('bar-we1');
+            const barFossil = document.getElementById('bar-fossil');
+
+            document.getElementById('year-title').innerText = data.title;
+            document.getElementById('year-desc').innerText = data.desc;
+
+            // Animate Bars height
+            barWE4.style.height = data.bars[0] + '%';
+            barWE1.style.height = data.bars[1] + '%';
+            barFossil.style.height = data.bars[2] + '%';
+        }
+
+        function scrollToId(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- CHARTS ---
+
+        function initCharts() {
+            // Chart 1: LCOH Range
+            const ctxLcoh = document.getElementById('lcohChart').getContext('2d');
+            new Chart(ctxLcoh, {
+                type: 'bar',
+                data: {
+                    labels: ['WE1 (网电)', 'WE2 (光伏+网)', 'WE3 (50% RE)', 'WE4 (离网)', 'SMR (天然气)', 'CG (煤)'],
+                    datasets: [
+                        {
+                            label: '最低成本 (省份)',
+                            data: [4.6, 4.6, 5.9, 7.3, 1.3, 2.38], // Min values from paper
+                            backgroundColor: '#93c5fd',
+                            stack: 'Stack 0'
+                        },
+                        {
+                            label: '成本浮动范围',
+                            data: [3.3, 3.0, 4.2, 7.5, 2.3, 0], // Max - Min
+                            backgroundColor: '#1e3a8a',
+                            stack: 'Stack 0'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if(context.datasetIndex === 0) return '最低: $' + context.raw;
+                                    let total = context.chart.data.datasets[0].data[context.dataIndex] + context.raw;
+                                    return '最高: $' + total.toFixed(1);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { title: {display: true, text: 'LCOH ($/kg)'}, stacked: true },
+                        x: { stacked: true }
+                    }
+                }
+            });
+
+            // Chart 2: LCCE Range
+            const ctxLcce = document.getElementById('lcceChart').getContext('2d');
+            new Chart(ctxLcce, {
+                type: 'bar',
+                data: {
+                    labels: ['WE1', 'WE2', 'WE3', 'WE4', 'CG (煤)'],
+                    datasets: [{
+                        label: '碳排放范围 (Min - Max)',
+                        data: [
+                            [5.2, 59.3], 
+                            [4.3, 47.4], 
+                            [3.7, 30.8], 
+                            [2.27, 2.37], 
+                            [22.7, 22.7]
+                        ],
+                        backgroundColor: [
+                            '#ef4444', // Red for high carbon potential
+                            '#f59e0b',
+                            '#84cc16',
+                            '#22c55e', // Green for WE4
+                            '#64748b'  // Grey for Coal
+                        ],
+                        borderRadius: 5,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `范围: ${ctx.raw[0]} - ${ctx.raw[1]} kg CO2`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { title: {display: true, text: 'LCCE (kg CO2/kg H2)'} }
+                    }
+                }
+            });
+        }
+
+        // Init
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+        });
+
+    </script>
+</body>
+</html>
