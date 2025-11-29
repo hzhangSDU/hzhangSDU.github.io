@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度解析：SCLF 氢泄漏溯源自对比学习框架</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Serif SC', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        h1, h2, h3 { font-family: 'Noto Serif SC', serif; }
+        
+        /* Custom Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #0ea5e9, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-connector {
+            position: absolute;
+            left: 24px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background-color: #e2e8f0;
+            z-index: 0;
+        }
+        
+        .interactive-card {
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .interactive-card.active {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+
+        /* Animation for diagram flow */
+        @keyframes flow {
+            0% { stroke-dashoffset: 24; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-line {
+            stroke-dasharray: 4;
+            animation: flow 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <!-- 1. Header: Metadata -->
+    <header class="bg-slate-900 text-white pt-16 pb-24 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                <div class="md:w-3/4">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">IEEE TIM 2025</span>
+                        <span class="text-slate-400 font-mono text-xs">Vol. 74, Art no. 3531113</span>
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-bold leading-tight mb-6">
+                        SCLF: 用于氢泄漏溯源的<br>
+                        <span class="text-sky-400">自对比学习框架</span>
+                    </h1>
+                    
+                    <!-- Authors -->
+                    <div class="text-sm text-slate-300">
+                        <span class="font-semibold text-white">Hui Zhang, Guangyao Fan, Jiaxin Zhang, Lizhi Zhang, Xuefang Li*, Bo Sun*</span>
+                        <br>
+                        <span class="text-slate-500 mt-1 block">山东大学 控制科学与工程学院 | 热科学与工程研究中心</span>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="md:w-1/4">
+                    <div class="glass-panel bg-slate-800/50 border-slate-700 p-5 text-center">
+                        <div class="text-4xl font-bold text-sky-400 mb-1">95.59%</div>
+                        <div class="text-xs text-slate-400 uppercase tracking-widest">平均 F1 Score</div>
+                        <div class="mt-3 text-xs text-slate-500 border-t border-slate-700 pt-2">
+                            少样本条件下性能最优
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 -mt-12 relative z-20 space-y-16">
+
+        <!-- 2. The Problem & Solution -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="glass-panel p-8 lg:col-span-2">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">核心痛点：为什么需要 SCLF？</h2>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    在氢能“制-储-运-用”全链条中，安全至关重要。传统的基于深度学习（如 CNN, LSTM）的泄漏定位方法虽然有效，但存在致命弱点：
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                        <div class="text-red-500 font-bold mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            标注成本极高
+                        </div>
+                        <p class="text-xs text-slate-600">获取“带标签”的泄漏数据需要反复拆解、实验，成本昂贵且不切实际。</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div class="text-slate-700 font-bold mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                            缺乏可解释性
+                        </div>
+                        <p class="text-xs text-slate-600">深度学习不仅是“黑盒”，在涉及生命安全的氢能领域，人类无法理解模型的决策逻辑是巨大的风险。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-panel p-8 bg-sky-50 border-sky-200 flex flex-col justify-center">
+                <h3 class="text-lg font-bold text-sky-900 mb-3">SCLF 的解决方案</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-sky-200 text-sky-700 flex items-center justify-center font-bold mr-3 text-sm">1</div>
+                        <div class="text-sm text-sky-800"><strong>自对比学习 (Upstream):</strong><br>利用大量无标签数据预训练，提取通用特征。</div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-sky-200 text-sky-700 flex items-center justify-center font-bold mr-3 text-sm">2</div>
+                        <div class="text-sm text-sky-800"><strong>时频融合 (Fusion):</strong><br>同时利用传感器信号的时域和频域特征。</div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-sky-200 text-sky-700 flex items-center justify-center font-bold mr-3 text-sm">3</div>
+                        <div class="text-sm text-sky-800"><strong>模糊逻辑 (Downstream):</strong><br>用模糊规则替代全连接层，实现“白盒”推理。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Framework Visualization (Interactive) -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">3. 框架详解：SCLF 是如何工作的？</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Architecture Diagram -->
+                <div class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-slate-100 text-slate-500 text-xs px-3 py-1 rounded-bl-lg font-mono">Architecture Diagram</div>
+                    
+                    <!-- Upstream Area -->
+                    <div id="diagram-upstream" class="mb-8 p-4 rounded-lg border-2 border-dashed border-sky-300 bg-sky-50/30 transition-all cursor-pointer hover:bg-sky-50" onclick="showDetail('upstream')">
+                        <div class="text-sky-700 font-bold mb-4 flex items-center">
+                            <span class="w-2 h-2 bg-sky-500 rounded-full mr-2"></span>
+                            上游 (Upstream): TF-FRM 预训练
+                        </div>
+                        <div class="flex justify-around items-center text-xs">
+                            <div class="text-center">
+                                <div class="bg-white border border-slate-300 p-2 rounded mb-2">原始数据 $x$</div>
+                                <div class="text-slate-400">↓ FFT</div>
+                                <div class="bg-white border border-slate-300 p-2 rounded mt-2">频谱 $x^F$</div>
+                            </div>
+                            <div class="text-2xl text-slate-300">→</div>
+                            <div class="text-center space-y-2">
+                                <div class="bg-sky-100 text-sky-800 p-2 rounded shadow-sm">时间编码器 $\mathcal{N}_T$</div>
+                                <div class="bg-purple-100 text-purple-800 p-2 rounded shadow-sm">频率编码器 $\mathcal{N}_F$</div>
+                            </div>
+                            <div class="text-2xl text-slate-300">→</div>
+                            <div class="bg-orange-100 text-orange-800 p-3 rounded shadow-sm border border-orange-200">
+                                <strong>Contrastive Loss</strong><br>
+                                拉近同源样本<br>推开异源样本
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flex justify-center mb-2">
+                        <svg class="w-6 h-6 text-slate-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </div>
+
+                    <!-- Downstream Area -->
+                    <div id="diagram-downstream" class="p-4 rounded-lg border-2 border-dashed border-green-300 bg-green-50/30 transition-all cursor-pointer hover:bg-green-50" onclick="showDetail('downstream')">
+                        <div class="text-green-700 font-bold mb-4 flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            下游 (Downstream): MR-FL 定位
+                        </div>
+                        <div class="flex justify-around items-center text-xs">
+                            <div class="bg-white border border-slate-300 p-2 rounded">
+                                时频特征 $z$
+                            </div>
+                            <div class="text-2xl text-slate-300">→</div>
+                            <div class="bg-green-100 text-green-800 p-3 rounded shadow-sm border border-green-200 text-center">
+                                <strong>多规则库模糊定位器 (MR-FL)</strong><br>
+                                IF $z_1$ is A AND ... THEN $y=...$
+                            </div>
+                            <div class="text-2xl text-slate-300">→</div>
+                            <div class="text-center">
+                                <div class="bg-slate-800 text-white p-2 rounded mb-1">X 坐标</div>
+                                <div class="bg-slate-800 text-white p-2 rounded">Y 坐标</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Details Panel -->
+                <div class="lg:col-span-4 space-y-4">
+                    <!-- Detail Card: Upstream -->
+                    <div id="detail-upstream" class="glass-panel p-6 border-l-4 border-sky-500">
+                        <h3 class="font-bold text-sky-900 mb-2">核心 1: 时频融合表示 (TF-FRM)</h3>
+                        <p class="text-sm text-slate-600 mb-4">
+                            这是模型的“大脑”。它在**无标签数据**上进行自监督学习。
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-500">
+                            <li>• <strong>双域输入:</strong> 同时处理原始时间序列和 FFT 频谱。</li>
+                            <li>• <strong>数据增强:</strong> 对信号进行抖动、缩放（Time）和增删频率分量（Freq），构建正负样本对。</li>
+                            <li>• <strong>联合损失:</strong> 不仅在时域和频域内部对比，还在“时-频”联合空间进行对比，强制模型学习一致性特征。</li>
+                        </ul>
+                    </div>
+
+                    <!-- Detail Card: Downstream -->
+                    <div id="detail-downstream" class="glass-panel p-6 border-l-4 border-green-500 opacity-50">
+                        <h3 class="font-bold text-green-900 mb-2">核心 2: 模糊定位器 (MR-FL)</h3>
+                        <p class="text-sm text-slate-600 mb-4">
+                            这是模型的“嘴巴”，负责输出结果。它取代了传统的全连接层。
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-500">
+                            <li>• <strong>可解释性:</strong> 每一个决策都由 IF-THEN 规则驱动。</li>
+                            <li>• <strong>多规则库:</strong> 针对每个坐标轴（X 和 Y）建立多个规则库，提升精度。</li>
+                            <li>• <strong>微调:</strong> 在少量有标签数据上进行微调。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Implementation Steps -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">4. 如何复现？实现路线图</h2>
+            <div class="relative">
+                <div class="step-connector"></div>
+                <div class="space-y-8">
+                    <!-- Step 1 -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-4 top-0 w-4 h-4 bg-sky-500 rounded-full border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-slate-800">Step 1: 数据准备与预处理</h3>
+                        <p class="text-sm text-slate-600 mt-1">
+                            收集多通道氢浓度传感器数据。论文使用了 1:24 的地下车库模型，布置了 12 个传感器，采集了 827 组氦气（替代氢气）扩散数据。
+                            <br><span class="font-mono text-xs bg-slate-100 p-1 rounded">操作: 归一化 -> FFT 变换 -> 数据增强</span>
+                        </p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-4 top-0 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-slate-800">Step 2: TF-FRM 预训练 (Pre-training)</h3>
+                        <p class="text-sm text-slate-600 mt-1">
+                            构建 Transformer 作为 Encoder。使用无标签数据训练。
+                            <br><span class="font-mono text-xs bg-slate-100 p-1 rounded">Loss = λ(L_Time + L_Freq) + (1-λ)L_Joint</span>
+                        </p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-4 top-0 w-4 h-4 bg-green-500 rounded-full border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-slate-800">Step 3: 微调与评估 (Fine-tuning)</h3>
+                        <p class="text-sm text-slate-600 mt-1">
+                            冻结或微调 Encoder 参数，接入 MR-FL 层。使用少量有标签数据（如 227 组）进行监督学习。
+                            <br><span class="font-mono text-xs bg-slate-100 p-1 rounded">Task: 回归预测 (X, Y) 坐标</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Results & Interpretability -->
+        <section class="mb-20">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">5. 实验结果与可解释性分析</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Chart -->
+                <div class="glass-panel p-6">
+                    <h3 class="font-bold text-slate-700 mb-4">模型性能对比 (F1 Score)</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-slate-400 mt-2">
+                        数据来源：论文 Table I & II (Test set)
+                    </p>
+                </div>
+
+                <!-- Interpretability Visualization -->
+                <div class="glass-panel p-6 bg-slate-50">
+                    <h3 class="font-bold text-slate-700 mb-4">打开“黑盒”：模糊规则可视化</h3>
+                    <div class="flex flex-col items-center justify-center h-full space-y-4">
+                        <div class="w-full h-8 bg-gradient-to-r from-slate-200 via-sky-500 to-slate-200 rounded relative">
+                            <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-sky-600">第 952 条规则被激活!</div>
+                            <div class="absolute top-0 left-1/2 w-1 h-full bg-red-500"></div>
+                        </div>
+                        <div class="text-xs font-mono bg-white p-3 border border-slate-200 rounded w-full">
+                            <span class="text-purple-600">IF:</span> T1 is High AND F2 is Low...<br>
+                            <span class="text-purple-600">THEN:</span> Output = 0.4192
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            论文通过热力图展示了：对于特定输入，只有特定的规则（如第 952 条）会被高强度激活。这意味着我们可以精确知道模型是<strong>根据哪些特征</strong>做出的判断。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script -->
+    <script>
+        // --- Interaction Logic ---
+        function showDetail(section) {
+            // Reset
+            document.getElementById('detail-upstream').classList.add('opacity-50');
+            document.getElementById('detail-downstream').classList.add('opacity-50');
+            document.getElementById('diagram-upstream').classList.remove('border-solid', 'bg-sky-100');
+            document.getElementById('diagram-downstream').classList.remove('border-solid', 'bg-green-100');
+
+            // Activate
+            if (section === 'upstream') {
+                document.getElementById('detail-upstream').classList.remove('opacity-50');
+                document.getElementById('diagram-upstream').classList.add('border-solid', 'bg-sky-100');
+            } else {
+                document.getElementById('detail-downstream').classList.remove('opacity-50');
+                document.getElementById('diagram-downstream').classList.add('border-solid', 'bg-green-100');
+            }
+        }
+
+        // --- Chart.js ---
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['SCLF (Ours)', 'ResNet', 'Transformer', 'LSTM', 'CNN', 'SVM'],
+                datasets: [{
+                    label: 'F1 Score (测试集)',
+                    data: [95.59, 91.49, 81.80, 74.66, 76.27, 79.95],
+                    backgroundColor: [
+                        '#0ea5e9', // Sky Blue for SCLF
+                        '#cbd5e1', '#cbd5e1', '#cbd5e1', '#cbd5e1', '#cbd5e1'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        max: 100,
+                        title: { display: true, text: 'F1 Score (%)' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
