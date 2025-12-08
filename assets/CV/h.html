@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张辉 (Hui-ZHANG) - 全量学术简历</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* 核心毛玻璃变量 - 更通透的深度磨砂感 */
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            
+            /* 品牌色 - 更加现代的学术蓝 */
+            --primary: #2c3e50;      /* 深邃蓝灰，更显高级 */
+            --accent: #3182ce;       /* 科技亮蓝 */
+            --text-main: #1a202c;
+            --text-sub: #4a5568;
+            
+            /* 背景渐变 - 更加柔和的极光色 */
+            --bg-gradient: linear-gradient(135deg, #f6f9fc 0%, #eef2f3 100%);
+            
+            /* 标签颜色系统 - 增加色彩饱和度与边框质感 */
+            --badge-green-bg: rgba(72, 187, 120, 0.12);
+            --badge-green-text: #22543d;
+            --badge-green-border: rgba(72, 187, 120, 0.4);
+
+            --badge-blue-bg: rgba(66, 153, 225, 0.12);
+            --badge-blue-text: #2a4365;
+            --badge-blue-border: rgba(66, 153, 225, 0.4);
+
+            --badge-gray-bg: rgba(160, 174, 192, 0.15);
+            --badge-gray-text: #4a5568;
+            --badge-gray-border: rgba(160, 174, 192, 0.4);
+            
+            --badge-orange-bg: rgba(237, 137, 54, 0.12);
+            --badge-orange-text: #9c4221;
+            --badge-orange-border: rgba(237, 137, 54, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* 动态背景装饰球 - 调整位置与颜色，营造光影感 */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        body::before {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(49, 130, 206, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -150px;
+            left: -150px;
+            filter: blur(60px);
+        }
+        body::after {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(128, 90, 213, 0.12) 0%, rgba(0,0,0,0) 70%); /* 引入微弱紫色提升高级感 */
+            bottom: -100px;
+            right: -100px;
+            filter: blur(50px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px; /* 增加间距 */
+        }
+
+        /* 通用玻璃卡片 - 增强质感 */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px); /* 增加模糊度 */
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.9); /* 顶部高光 */
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        }
+        
+        /* 侧边栏样式 */
+        .sidebar {
+            height: fit-content;
+            position: sticky;
+            top: 30px;
+        }
+
+        .avatar-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 更深邃的渐变 */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(118, 75, 162, 0.3);
+            border: 4px solid rgba(255,255,255,0.8); /* 增加头像边框 */
+        }
+
+        .profile-name {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-role {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 25px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .info-list .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 14px;
+            font-size: 14px;
+            color: var(--text-sub);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            padding-bottom: 10px;
+        }
+        .info-item i { width: 24px; color: var(--accent); margin-top: 3px; flex-shrink: 0; }
+
+        .side-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 25px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.8);
+            padding: 5px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            color: var(--text-main);
+            transition: all 0.2s;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+        .tag:hover { background: white; border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+        /* 主内容样式 */
+        .section-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(49, 130, 206, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.3px;
+        }
+        .section-header i { color: var(--accent); opacity: 1; filter: drop-shadow(0 2px 4px rgba(49,130,206,0.2)); }
+
+        /* 条目卡片 (论文/专利/项目) */
+        .item-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(5px); /* 内部微模糊 */
+        }
+        .item-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border-color: rgba(49, 130, 206, 0.4);
+        }
+
+        .item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .item-meta {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        /* 徽章系统 */
+        .badges-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-green { background: var(--badge-green-bg); color: var(--badge-green-text); border-color: var(--badge-green-border); }
+        .badge-blue { background: var(--badge-blue-bg); color: var(--badge-blue-text); border-color: var(--badge-blue-border); }
+        .badge-gray { background: var(--badge-gray-bg); color: var(--badge-gray-text); border-color: var(--badge-gray-border); }
+        .badge-orange { background: var(--badge-orange-bg); color: var(--badge-orange-text); border-color: var(--badge-orange-border); }
+
+        /* 网格布局 (荣誉 & 兼职) */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .grid-card {
+            background: rgba(255,255,255,0.5);
+            padding: 15px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-left: 4px solid var(--accent);
+            transition: transform 0.2s;
+        }
+        .grid-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.8); }
+        .grid-head { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
+        .grid-body { font-size: 13px; color: var(--text-sub); }
+
+        /* 打印适配 */
+        @media print {
+            body { background: white; -webkit-print-color-adjust: exact; padding: 0; }
+            .container { display: block; max-width: 100%; }
+            .sidebar { position: static; margin-bottom: 20px; width: 100%; }
+            .glass-card, .item-card { 
+                box-shadow: none; border: 1px solid #ddd; background: white; page-break-inside: avoid; 
+                margin-bottom: 10px; padding: 10px;
+            }
+            .badge { border: 1px solid #000; color: #000; background: none !important; }
+        }
+
+        @media (max-width: 800px) {
+            .container { grid-template-columns: 1fr; gap: 20px; }
+            .sidebar { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <aside class="sidebar glass-card">
+        <div class="avatar-container">
+            <div class="avatar">张辉</div>
+        </div>
+        <div class="profile-name">Hui-ZHANG</div>
+        <div class="profile-role">
+            博士研究生 | 中共党员<br>
+            <span style="font-size: 12px; opacity: 0.8;">新能源与高效节能国家地方联合工程研究中心</span>
+        </div>
+
+        <div class="info-list">
+            <div class="info-item"><i class="fas fa-university"></i> 山东大学 (硕博连读)</div>
+            <div class="info-item"><i class="fas fa-map-marker-alt"></i> 山东 · 临沂 (1999.12)</div>
+            <div class="info-item"><i class="fas fa-id-card"></i> 中国自动化学会会员</div>
+            <div class="info-item"><i class="fas fa-user-graduate"></i> Science Father 杰出研究员</div>
+        </div>
+
+        <div class="side-title"><i class="fas fa-microscope"></i> 研究领域</div>
+        <div class="tag-cloud">
+            <span class="tag">控制理论与工程</span>
+            <span class="tag">人工智能</span>
+            <span class="tag">氢能安全</span>
+            <span class="tag">计算流体力学</span>
+            <span class="tag">时空演化机理</span>
+        </div>
+
+        <div class="side-title"><i class="fas fa-brain"></i> 研究兴趣</div>
+        <div class="tag-cloud">
+            <span class="tag">深度强化学习</span>
+            <span class="tag">大语言模型 LLM</span>
+            <span class="tag">AI for Science</span>
+            <span class="tag">多源传感器优化</span>
+            <span class="tag">模糊推理</span>
+            <span class="tag">神经架构搜索</span>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-user-circle"></i> 个人简介</h2>
+            <p style="text-align: justify; font-size: 14px; color: var(--text-sub);">
+                张辉，男，汉族，1999年12月生，山东临沂人，中共党员，中国自动化学会会员，国际科学联盟ScienceFather杰出研究员。目前，在山东大学新能源与高效节能国家地方联合工程研究中心硕博连读，从事氢能系统安全与优化控制研究，作为核心人员参与国家自然科学基金重大项目、科技部“氢进万家”重大科技示范工程以及国家重点研发计划等国家级科研任务，研究成果突破了多源异构传感器网络优化部署与故障诊断关键技术，开发了氢能数智化安全管控系统，在潍坊、淄博等“氢进万家”重点示范区域开展应用研究，显著提升了氢能系统的安全性。在领域内国际顶级及权威期刊或会议累计发表学术论文10篇，其中以第一作者在IEEE TRANSACTIONS ON INDUSTRIAL INFORMATICS、IEEE TRANSACTIONS ON INSTRUMENTATION AND MEASUREMENT和Expert Systems with Applications发表论文3篇(IF=9.9/5.6/7.5，中科院1区Top论文2篇)，EI收录国际会议论文2篇，获最佳会议论文奖1项；申请国家发明专利5件；登记计算机软件著作权2件；作为主要起草人参编山东省地方标准1项及团体标准4项；担任IEEE TRANSACTIONS ON FUZZY SYSTEMS、IEEE TRANSACTIONS ON INDUSTRY APPLICATIONS等6本国际期刊审稿人及全球开源共享出版社学术委员会委员。在未来，将致力于先进人工智能技术与氢能系统的理论创新与交叉研究，探索大模型在保障系统稳定安全运行的应用潜力，力争产出具有国际影响力的标志性成果。
+            </p>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-trophy"></i> 荣誉与奖学金</h2>
+            <div class="grid-layout">
+                <div class="grid-card">
+                    <div class="grid-head">国家奖学金</div>
+                    <div class="grid-body">2024-2025 学年</div>
+                </div>
+                <div class="grid-card">
+                    <div class="grid-head">第十四届国际最佳研究者奖</div>
+                    <div class="grid-body">Science Father (第一位)</div>
+                </div>
+                <div class="grid-card">
+                    <div class="grid-head">MRAI 2025 最佳论文奖</div>
+                    <div class="grid-body">IEEE (第二位)</div>
+                </div>
+                <div class="grid-card">
+                    <div class="grid-head">山东省研究生优秀成果奖</div>
+                    <div class="grid-body">山东省教育厅 (第二位)</div>
+                </div>
+                <div class="grid-card">
+                    <div class="grid-head">“双碳”创新与创意大赛</div>
+                    <div class="grid-body">国家级三等奖 (第五位)</div>
+                </div>
+                <div class="grid-card">
+                    <div class="grid-head">博士研究生一等奖学金</div>
+                    <div class="grid-body">山东大学 (2023-2024)</div>
+                </div>
+                 <div class="grid-card">
+                    <div class="grid-head">硕士研究生三等奖学金</div>
+                    <div class="grid-body">山东大学 (2022-2023)</div>
+                </div>
+                 <div class="grid-card">
+                    <div class="grid-head">博士研究生中期考核优秀奖</div>
+                    <div class="grid-body">山东大学 (2024-2025)</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-book-open"></i> 期刊论文 (14篇)</h2>
+            
+            <div class="item-card">
+                <div class="item-title">Interactive Integrated Design Framework for Optimizing the Structure, Capacity, and Operation of Multienergy Systems via Reinforcement Learning</div>
+                <div class="item-meta">IEEE Transactions on Industrial Informatics (IF=9.9) | 2025 已发表</div>
+                <div class="badges-container">
+                    <span class="badge badge-green">一作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">SCLF: Self-Contrastive Learning Framework for Hydrogen Leakage Traceability</div>
+                <div class="item-meta">IEEE Transactions on Instrumentation and Measurement (IF=5.6) | 2025 已发表</div>
+                <div class="badges-container">
+                    <span class="badge badge-green">一作</span>
+                    <span class="badge badge-blue">中科院二区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Minibatch Adaptive Optimization Algorithm via Forward Automatic Differentiation for Designing Efficient TSK Fuzzy Systems</div>
+                <div class="item-meta">IEEE Transactions on Fuzzy Systems | 2022 审稿中</div>
+                <div class="badges-container">
+                    <span class="badge badge-green">一作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Hydrogen Perception System Design Optimize the Deployment Scheme of Multi-source Heterogeneous Hydrogen Sensors via Reinforcement Learning</div>
+                <div class="item-meta">IEEE Transactions on Neural Networks and Learning Systems | 2025 审稿中</div>
+                <div class="badges-container">
+                    <span class="badge badge-green">一作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Physics-Informed Neural Networks for Accurate and Stable Spatiotemporal Evolution of Hydrogen Leakage Diffusion</div>
+                <div class="item-meta">IEEE Transactions on Industrial Informatics | 2025 待提交</div>
+                <div class="badges-container">
+                    <span class="badge badge-green">一作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">A novel hybrid deep fuzzy model based on gradient descent algorithm with application to time series forecasting</div>
+                <div class="item-meta">Expert Systems with Applications (IF=7.5) | 2024 已发表</div>
+                <div class="badges-container">
+                    <span class="badge badge-green">一作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Economic and environmental competitiveness of multiple hydrogen production pathways in China</div>
+                <div class="item-meta">Nature Communications | 2025 已发表</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">二作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Bi-Level Optimal Design of Integrated Energy System with Synergy of Renewables, Conversion, Storage, and Demand</div>
+                <div class="item-meta">IEEE Transactions on Industry Applications | 2025 已发表</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">二作</span>
+                    <span class="badge badge-blue">中科院二区</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">An Interpretable Fault Diagnosis Approach for Hydrogen Refueling Station Equipment via Fuzzy System</div>
+                <div class="item-meta">IEEE Transactions on Industrial Informatics | 2025 待提交</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">二作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Graph Attention Causal Reasoning for Early Warning of Hydrogen Safety Faults</div>
+                <div class="item-meta">IEEE Transactions on Industrial Informatics | 2025 待提交</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">二作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Feasibility evaluation of hydrogen energy in China based on a complete industrial chain economic model</div>
+                <div class="item-meta">Applied Energy | 2025 审稿中</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">四作</span>
+                    <span class="badge badge-blue">中科院一区</span>
+                    <span class="badge badge-orange">Top期刊</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">A novel state of health estimation method for lithium-ion battery based on forward-broad learning system</div>
+                <div class="item-meta">Journal of Energy Storage | 2024 已发表</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">三作</span>
+                    <span class="badge badge-blue">中科院二区</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Collaborative planning for power and hydrogen networks considering hydrogen pipeline slow dynamic and pipe storage characteristics</div>
+                <div class="item-meta">International Journal of Hydrogen Energy | 2025 已发表</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">六作</span>
+                    <span class="badge badge-blue">中科院二区</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-title">Collaborative optimal scheduling of integrated energy systems considering P2G and multiple types of energy storage</div>
+                <div class="item-meta">Acta Energiae Solaris Sinica | 2025 审稿中</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">二作</span>
+                    <span class="badge badge-blue">中文核心期刊</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-users"></i> 会议论文 (4篇)</h2>
+            <div class="item-card">
+                <div class="item-title">Time Series Forecasting Based on Interval Type-2 Fuzzy Logic System with PSO</div>
+                <div class="item-meta">2021 China Automation Congress (CAC) | 已发表</div>
+                <div class="badges-container"><span class="badge badge-green">一作</span></div>
+            </div>
+            <div class="item-card">
+                <div class="item-title">Interval Type-2 Fuzzy Logic System Based on Batch Normalization and Uniform Regularization with Application to Time Series Forecasting</div>
+                <div class="item-meta">2023 China Automation Congress (CAC) | 已发表</div>
+                <div class="badges-container"><span class="badge badge-green">一作</span></div>
+            </div>
+            <div class="item-card">
+                <div class="item-title">A Method for Hydrogen Leakage Traceability Based on ResNet</div>
+                <div class="item-meta">2025 Int. Conf. on Smart Grid, Electrical Automation... | 已发表</div>
+                <div class="badges-container"><span class="badge badge-gray">二作</span></div>
+            </div>
+            <div class="item-card">
+                <div class="item-title">Cooperative Optimal Scheduling of Integrated Energy System with P2G and Seasonal Hydrogen Storage</div>
+                <div class="item-meta">2025 Int. Conf. on Mechatronics, Robotics, and AI | 已发表</div>
+                <div class="badges-container"><span class="badge badge-gray">二作</span></div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-file-contract"></i> 知识产权 - 发明/实用新型 (10项)</h2>
+            <div class="grid-layout">
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">基于强化学习的氢气传感器优化布局方法及系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第二发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">一种氢气泄漏扩散过程建模方法及系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第二发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">一种含氢综合能源系统的全流程一体化设计方法及系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第二发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">基于物理信息神经网络的输氢管道建模方法及系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第三发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">基于自适应PINN的含氢综合能源数字孪生建模方法及系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第三发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">一种融合领域知识的氢基多能源系统集成设计方法及系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第四发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">一种基于多源氢气传感器信号时频域对比学习的泄漏定位方法</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第三发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">基于图神经网络的电解水制氢系统故障诊断方法及系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">发明专利</span>
+                        <span class="badge badge-gray">实质性审查</span>
+                        <span class="badge badge-gray">第五发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">一种基于物联网的安防装置</div>
+                    <div class="badges-container">
+                        <span class="badge badge-green">实用新型</span>
+                        <span class="badge badge-green">已授权</span>
+                        <span class="badge badge-green">第一发明人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">一种基于物联网的快递收发系统</div>
+                    <div class="badges-container">
+                        <span class="badge badge-green">实用新型</span>
+                        <span class="badge badge-green">已授权</span>
+                        <span class="badge badge-green">第一发明人</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-code"></i> 知识产权 - 软件著作权 (6项)</h2>
+            <div class="grid-layout">
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">山东省氢能大数据智慧安全管控平台</div>
+                    <div class="badges-container">
+                        <span class="badge badge-gray">已受理</span>
+                        <span class="badge badge-gray">第二著作权人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">山东省氢能安全保障平台</div>
+                    <div class="badges-container">
+                        <span class="badge badge-gray">已受理</span>
+                        <span class="badge badge-gray">第二著作权人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">山东省氢能大数据分析平台</div>
+                    <div class="badges-container">
+                        <span class="badge badge-gray">已受理</span>
+                        <span class="badge badge-gray">第二著作权人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">氢能系统实时仿真终端软件</div>
+                    <div class="badges-container">
+                        <span class="badge badge-gray">已受理</span>
+                        <span class="badge badge-gray">第二著作权人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">基于C4.5算法的大学生在校恋爱软件</div>
+                    <div class="badges-container">
+                        <span class="badge badge-green">已授权</span>
+                        <span class="badge badge-green">第一著作权人</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">基于CART算法的寻亲软件</div>
+                    <div class="badges-container">
+                        <span class="badge badge-green">已授权</span>
+                        <span class="badge badge-green">第一著作权人</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-project-diagram"></i> 参与科研项目 (4项)</h2>
+            <div class="item-card">
+                <div class="item-title">氢能多场景深度融合及智慧管控技术研究与示范应用</div>
+                <div class="item-meta">中国科技部 | 国家重点研发计划</div>
+                <div class="badges-container">
+                    <span class="badge badge-orange">经费 2.05亿</span>
+                    <span class="badge badge-green">项目骨干</span>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-title">管道氢气在城镇供能领域关键技术研究与规模应用</div>
+                <div class="item-meta">中国科技部 | 国家重点研发计划</div>
+                <div class="badges-container">
+                    <span class="badge badge-orange">经费 5.15亿</span>
+                    <span class="badge badge-gray">参与</span>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-title">氢能工厂和车辆应用过程中氢气释放扩散研究及安全标准规范构建</div>
+                <div class="item-meta">中国科技部 | 国家重点研发计划</div>
+                <div class="badges-container">
+                    <span class="badge badge-orange">经费 400万</span>
+                    <span class="badge badge-gray">参与</span>
+                </div>
+            </div>
+             <div class="item-card">
+                <div class="item-title">广东省重点研发项目</div>
+                <div class="item-meta">广东省科技厅</div>
+                <div class="badges-container">
+                    <span class="badge badge-gray">参与</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-ruler-combined"></i> 编制标准 (6项)</h2>
+            <div class="grid-layout">
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">含氢分布式综合能源系统运行优化指南</div>
+                    <div class="badges-container">
+                        <span class="badge badge-green">山东省地方标准</span>
+                        <span class="badge badge-green">已实施</span>
+                        <span class="badge badge-gray">第七位</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">氢能数据智能管控平台 参考架构</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">团体标准</span>
+                        <span class="badge badge-green">已发布</span>
+                        <span class="badge badge-gray">第六位</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">氢能产业链数据应用与管理 数据结构</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">团体标准</span>
+                        <span class="badge badge-green">已发布</span>
+                        <span class="badge badge-gray">第八位</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">氢能服务区数据采集规范</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">团体标准</span>
+                        <span class="badge badge-green">已发布</span>
+                        <span class="badge badge-gray">第八位</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">掺氢管道数据采集规范</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">团体标准</span>
+                        <span class="badge badge-green">已发布</span>
+                        <span class="badge badge-gray">第十四位</span>
+                    </div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">氢能装备故障诊断技术规范</div>
+                    <div class="badges-container">
+                        <span class="badge badge-blue">团体标准</span>
+                        <span class="badge badge-gray">立项、送审</span>
+                        <span class="badge badge-gray">第四位</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-user-tie"></i> 学术兼职 (9项)</h2>
+            <div class="grid-layout">
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">IEEE Trans. on Fuzzy Systems</div>
+                    <div class="item-meta">IEEE 主办汇刊</div>
+                    <div class="badges-container"><span class="badge badge-blue">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">IEEE Trans. on Industry Applications</div>
+                    <div class="item-meta">IEEE 主办汇刊</div>
+                    <div class="badges-container"><span class="badge badge-blue">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">The Journal of Supercomputing</div>
+                    <div class="item-meta">Nature 旗下国际期刊</div>
+                    <div class="badges-container"><span class="badge badge-blue">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">Scientific Reports</div>
+                    <div class="item-meta">Nature 旗下国际期刊</div>
+                    <div class="badges-container"><span class="badge badge-blue">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">Energy Informatics</div>
+                    <div class="item-meta">Nature 旗下国际期刊</div>
+                    <div class="badges-container"><span class="badge badge-blue">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">J. Circuits, Systems, and Computers</div>
+                    <div class="item-meta">Elsevier 旗下国际期刊</div>
+                    <div class="badges-container"><span class="badge badge-blue">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">Int. Workshop on Engineering Physics</div>
+                    <div class="item-meta">国际 EI 会议</div>
+                    <div class="badges-container"><span class="badge badge-gray">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">China Automation Congress</div>
+                    <div class="item-meta">国际 EI 会议</div>
+                    <div class="badges-container"><span class="badge badge-gray">论文审稿人</span></div>
+                </div>
+                <div class="item-card" style="margin:0;">
+                    <div class="item-title" style="font-size:13px;">Global Open Share Publishing</div>
+                    <div class="item-meta">国际开放共享出版社</div>
+                    <div class="badges-container"><span class="badge badge-green">学术委员会成员</span></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>
