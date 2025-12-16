@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>张辉 (Hui-ZHANG) - 全量学术简历</title>
+    <title>张辉 (Hui-ZHANG)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -76,6 +76,11 @@
             bottom: -100px;
             right: -100px;
             filter: blur(50px);
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, 30px) rotate(5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
         }
 
         .container {
@@ -250,6 +255,35 @@
         .badge-blue { background: var(--badge-blue-bg); color: var(--badge-blue-text); border-color: var(--badge-blue-border); }
         .badge-gray { background: var(--badge-gray-bg); color: var(--badge-gray-text); border-color: var(--badge-gray-border); }
         .badge-orange { background: var(--badge-orange-bg); color: var(--badge-orange-text); border-color: var(--badge-orange-border); }
+		
+		/* 专门为人才计划卡片设计的突出样式 */
+		.talent-plan-card {
+			background: linear-gradient(135deg, rgba(49, 130, 206, 0.1) 0%, rgba(255, 255, 255, 0.7) 100%);
+			border-left: 6px solid var(--accent); /* 强调色左边框 */
+			padding: 25px;
+			margin-bottom: 25px;
+			border-radius: 12px;
+			box-shadow: 0 4px 15px rgba(49, 130, 206, 0.2);
+			display: flex;
+			align-items: center;
+			gap: 20px;
+		}
+		.talent-plan-card i {
+			font-size: 36px;
+			color: var(--accent);
+			flex-shrink: 0;
+		}
+		.talent-info-title {
+			font-size: 18px;
+			font-weight: 700;
+			color: var(--primary);
+			margin-bottom: 5px;
+		}
+		.talent-info-body {
+			font-size: 14px;
+			color: var(--text-sub);
+		}
+
 
         /* 网格布局 (荣誉 & 兼职) */
         .grid-layout {
@@ -279,6 +313,11 @@
                 box-shadow: none; border: 1px solid #ddd; background: white; page-break-inside: avoid; 
                 margin-bottom: 10px; padding: 10px;
             }
+			.talent-plan-card {
+				background: #f0f8ff !important;
+				border-color: #3182ce !important;
+				box-shadow: none;
+			}
             .badge { border: 1px solid #000; color: #000; background: none !important; }
         }
 
@@ -336,6 +375,21 @@
             <p style="text-align: justify; font-size: 14px; color: var(--text-sub);">
                 张辉，男，汉族，1999年12月生，山东临沂人，中共党员，中国自动化学会会员，国际科学联盟ScienceFather杰出研究员，入选中国科协青年科技人才培育工程博士生专项计划（博士青培）。目前，在山东大学新能源与高效节能国家地方联合工程研究中心硕博连读，从事氢能系统安全与优化控制研究，作为核心人员参与国家自然科学基金重大项目、科技部“氢进万家”重大科技示范工程以及国家重点研发计划等国家级科研任务，研究成果突破了多源异构传感器网络优化部署与故障诊断关键技术，开发了氢能数智化安全管控系统，在潍坊、淄博等“氢进万家”重点示范区域开展应用研究，显著提升了氢能系统的安全性。在领域内国际顶级及权威期刊或会议累计发表学术论文10篇，其中以第一作者在IEEE TRANSACTIONS ON INDUSTRIAL INFORMATICS、IEEE TRANSACTIONS ON INSTRUMENTATION AND MEASUREMENT和Expert Systems with Applications发表论文3篇(IF=9.9/5.6/7.5，中科院1区Top论文2篇)，EI收录国际会议论文2篇，获最佳会议论文奖1项；申请国家发明专利5件；登记计算机软件著作权2件；作为主要起草人参编山东省地方标准1项及团体标准4项；担任IEEE TRANSACTIONS ON FUZZY SYSTEMS、IEEE TRANSACTIONS ON INDUSTRY APPLICATIONS等6本国际期刊审稿人及全球开源共享出版社学术委员会委员。在未来，将致力于先进人工智能技术与氢能系统的理论创新与交叉研究，探索大模型在保障系统稳定安全运行的应用潜力，力争产出具有国际影响力的标志性成果。
             </p>
+        </section>
+        
+        <section class="glass-card">
+            <h2 class="section-header"><i class="fas fa-star"></i> 人才计划</h2>
+            <div class="talent-plan-card">
+                <i class="fas fa-user-check"></i>
+                <div>
+                    <div class="talent-info-title">中国科协青年科技人才培育工程博士生专项计划</div>
+                    <div class="talent-info-body">入选年份：**2025年** | 简称：**博士青培**</div>
+                    <div class="badges-container" style="margin-top: 10px;">
+                        <span class="badge badge-orange">国家级人才项目</span>
+                        <span class="badge badge-blue">青年科技人才培育</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="glass-card">
@@ -714,50 +768,50 @@
             <div class="grid-layout">
                 <div class="item-card" style="margin:0;">
                     <div class="item-title" style="font-size:13px;">含氢分布式综合能源系统运行优化指南</div>
+                    <div class="item-meta">山东省地方标准 | 已实施 | 第七位</div>
                     <div class="badges-container">
-                        <span class="badge badge-green">山东省地方标准</span>
+                        <span class="badge badge-green">地方标准</span>
                         <span class="badge badge-green">已实施</span>
-                        <span class="badge badge-gray">第七位</span>
                     </div>
                 </div>
                 <div class="item-card" style="margin:0;">
                     <div class="item-title" style="font-size:13px;">氢能数据智能管控平台 参考架构</div>
+                    <div class="item-meta">团体标准 | 已发布 | 第六位</div>
                     <div class="badges-container">
                         <span class="badge badge-blue">团体标准</span>
                         <span class="badge badge-green">已发布</span>
-                        <span class="badge badge-gray">第六位</span>
                     </div>
                 </div>
                 <div class="item-card" style="margin:0;">
                     <div class="item-title" style="font-size:13px;">氢能产业链数据应用与管理 数据结构</div>
+                    <div class="item-meta">团体标准 | 已发布 | 第八位</div>
                     <div class="badges-container">
                         <span class="badge badge-blue">团体标准</span>
                         <span class="badge badge-green">已发布</span>
-                        <span class="badge badge-gray">第八位</span>
                     </div>
                 </div>
                 <div class="item-card" style="margin:0;">
                     <div class="item-title" style="font-size:13px;">氢能服务区数据采集规范</div>
+                    <div class="item-meta">团体标准 | 已发布 | 第八位</div>
                     <div class="badges-container">
                         <span class="badge badge-blue">团体标准</span>
                         <span class="badge badge-green">已发布</span>
-                        <span class="badge badge-gray">第八位</span>
                     </div>
                 </div>
                 <div class="item-card" style="margin:0;">
                     <div class="item-title" style="font-size:13px;">掺氢管道数据采集规范</div>
+                    <div class="item-meta">团体标准 | 已发布 | 第十四位</div>
                     <div class="badges-container">
                         <span class="badge badge-blue">团体标准</span>
                         <span class="badge badge-green">已发布</span>
-                        <span class="badge badge-gray">第十四位</span>
                     </div>
                 </div>
                 <div class="item-card" style="margin:0;">
                     <div class="item-title" style="font-size:13px;">氢能装备故障诊断技术规范</div>
+                    <div class="item-meta">团体标准 | 立项、送审 | 第四位</div>
                     <div class="badges-container">
                         <span class="badge badge-blue">团体标准</span>
-                        <span class="badge badge-gray">立项、送审</span>
-                        <span class="badge badge-gray">第四位</span>
+                        <span class="badge badge-gray">送审中</span>
                     </div>
                 </div>
             </div>
