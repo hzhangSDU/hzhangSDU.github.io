@@ -3,13 +3,15 @@ title:          "A Coordinated Optimization Framework for Hydrogen Leakage Conce
 date:           2026-04-16 00:01:00 +0800
 selected:       true
 pub_post:       'IEEE Transactions on Industrial Cyber-Physical Systems'
-pub_date:       "2026, Waiting for Submission"
+pub_date:       "2026, Under Review"
 
 cover:  assets/images/covers/TICPS2026.png
 authors:
-  - Hui ZHANG
+  - Lizhi ZHANG
+  - Hui ZHANG#
+  - Haotian XU
   - Wei PENG
-  - Bo SUN#
+  - Shuai LIU
 links:
   # code: https://github.com/hzhangSDU/MBAO-FAD
   # pdf: assets/pdf/CEEPE 2026.pdf
