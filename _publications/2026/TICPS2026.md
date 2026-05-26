@@ -5,7 +5,7 @@ selected:       true
 pub_post:       'IEEE Transactions on Industrial Cyber-Physical Systems'
 pub_date:       "2026, Under Review"
 
-cover:  assets/images/covers/TICPS2026.png
+cover:  assets/images/covers/TICPS20261.png
 authors:
   - Lizhi ZHANG
   - Hui ZHANG#
